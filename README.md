@@ -13,7 +13,6 @@ footer: 'Advanced Web Frameworks 2025'
 
 ## Resource Description
 
-Define your **four resources** here in terms of a REST API. Provide the name, a short description, and relationships to other resources.
 
 | Resource  | Description  | Relationships  |
 |-----------|--------------|----------------|
