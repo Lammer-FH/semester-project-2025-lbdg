@@ -74,13 +74,13 @@ Frontend: Detail view of a book with aggregated ratings and user comments.
 ### 🟥 User Story #4 - Manage books
 
 **Story:**  
-As a librarian, I want to CREATE, UPDATE and DELETE a book
+As a librarian, I want to create, edit and delete a book
 
 **Affected Resources:**  
 `book`
 
 **Planned Implementation:**  
-POST, PUT, DELETE `/books`
+GET, POST `/books` | PUT, DELETE `/books/{id}`
 Frontend: Booking form where a logged-in user selects a book and submits a reservation request.
 
 ---
@@ -89,25 +89,25 @@ Frontend: Booking form where a logged-in user selects a book and submits a reser
 ### 🟥 User Story #5 – Create or Edit a Booking
 
 **Story:**  
-As a librarian, I want to create or edit a booking so that I can manage the bookings.
+As a librarian, I want to get, create or edit a booking so that I can manage the bookings.
 
 **Affected Resources:**  
 `bookings`
 
 **Planned Implementation:**  
-POST `/bookings` PUT `/bookings/{id}` or DELETE `/bookings/{id}`  
+GET, POST `/books/{id}/bookings` | PUT, DELETE `/bookings/{id}`
 Frontend: User’s account page with a list of current bookings, including options to edit or cancel.
 
 ---
 
-### 🟥 User Story #6 - Submit, Edit, or Delete a Rating
+### 🟥 User Story #6 - Create, Edit, or Delete a Rating
 
 **Story:**  
-As a user, I want to submit, edit, or delete a rating for a book so that I can share my opinion and help others.
+As a user, I want to get, create, edit, or delete a rating for a book so that I can share my opinion and help others.
 
 **Affected Resources:**  
 `ratings`, `books`, `users`
 
 **Planned Implementation:**  
-POST `/ratings`, PUT `/ratings/{id}`, DELETE `/ratings/{id}`
+GET, POST `/ratings` | PUT `/ratings/{id}` | DELETE `/ratings/{id}`
 Frontend: Rating form on the book detail page; user can add a new rating or manage their existing ratings.
