@@ -85,7 +85,6 @@ Frontend: Booking form where a logged-in user selects a book and submits a reser
 
 ---
 
-
 ### 🟥 User Story #5 – Create or Edit a Booking
 
 **Story:**  
