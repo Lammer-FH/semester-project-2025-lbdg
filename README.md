@@ -95,7 +95,7 @@ As a librarian, I want to create or edit a booking so that I can manage the book
 `bookings`
 
 **Planned Implementation:**  
-PUT `/bookings/{id}` or DELETE `/bookings/{id}`  
+POST `/bookings` PUT `/bookings/{id}` or DELETE `/bookings/{id}`  
 Frontend: User’s account page with a list of current bookings, including options to edit or cancel.
 
 ---
