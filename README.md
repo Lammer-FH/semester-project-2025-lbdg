@@ -27,7 +27,7 @@ footer: 'Advanced Web Frameworks 2025'
 
 - 🟦 **#1 – Static page (no backend)**
 - 🟩 **#2–3 – GET endpoints with at least one relationship between two resources**
-- 🟥 **#4–6 – CRUD with GET, POST, PUT, or DELETE on individual or combined resources*
+- 🟥 **#4–6 – CRUD with GET, POST, PUT, or DELETE on individual or combined resources**
 
 ---
 
