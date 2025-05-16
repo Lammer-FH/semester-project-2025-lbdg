@@ -13,7 +13,7 @@ public class BookDTO {
     private String author;
     private String title;
     private String isbn;
-    private MultipartFile image;
+    private String imageUrl;
     private String publisher;
     private String shortDescription;
     private Integer publishedYear;

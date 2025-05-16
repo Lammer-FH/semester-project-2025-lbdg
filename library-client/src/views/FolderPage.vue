@@ -17,8 +17,38 @@
       </ion-header>
 
       <div id="container">
-        <strong class="capitalize">{{ $route.params.id }}</strong>
-        <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+        <div>
+          <h2>Bücherliste</h2>
+          <table>
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Titel</th>
+              <th>Autor</th>
+              <th>ISBN</th>
+              <th>Verlag</th>
+              <th>Jahr</th>
+              <th>Beschreibung</th>
+              <th>Bild</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="book in books" :key="book.isbn">
+              <td>{{ book.libraryId }}</td>
+              <td>{{ book.title }}</td>
+              <td>{{ book.author }}</td>
+              <td>{{ book.isbn }}</td>
+              <td>{{ book.publisher }}</td>
+              <td>{{ book.publishedYear }}</td>
+              <td>{{ book.shortDescription }}</td>
+              <td>
+                <img v-if="book.imageUrl" :src="book.imageUrl" alt="Buchbild" width="80"/>
+                <span v-else>Kein Bild</span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </ion-content>
   </ion-page>
@@ -26,6 +56,41 @@
 
 <script setup lang="ts">
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import axios from 'axios'
+import { ref, onMounted } from 'vue';
+
+  interface Book {
+    libraryId: number
+    author: string
+    title: string
+    isbn: string
+    publisher: string
+    shortDescription: string
+    publishedYear: number
+    imageUrl: string | null
+  }
+
+  const books = ref<Book[]>([])
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/library-system/books')
+
+      // ✅ Antwortdaten in die books-Variable schreiben
+      books.value = response.data
+
+      console.log('Geladene Bücher:', books.value)
+    } catch (error) {
+      console.error("Fehler beim Abrufen:", error)
+    } finally {
+      console.log("Anfrage abgeschlossen")
+    }
+  }
+
+  // Call automatically when component is mounted
+  onMounted(() => {
+    fetchData();
+  });
 </script>
 
 <style scoped>
