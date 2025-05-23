@@ -11,6 +11,11 @@ footer: 'Advanced Web Frameworks 2025'
 
 # Project Specification – Template
 
+## Setup
+* run docker-compose.yml to create db
+* start backend: run LibraryBackendApplication
+* start frontend- "ionic start"
+
 ## Resource Description
 
 
