@@ -37,19 +37,20 @@ public class BookService {
 
     public Optional<List<BookDTO>> getBooks(){
         List<BookDTO> books = new ArrayList<>();
+        List <BookEntity> bookEntities = bookRepository.findAll();
+        bookEntities.forEach(bookEntity -> {
+            books.add(BookDTO.builder()
+                    .libraryId(bookEntity.getLibraryId())
+                    .author(bookEntity.getAuthor())
+                    .title(bookEntity.getTitle())
+                    .isbn(bookEntity.getIsbn())
+                    .imageUrl(null)
+                    .publisher(bookEntity.getPublisher())
+                    .shortDescription(bookEntity.getShortDescription())
+                    .publishedYear(bookEntity.getPublishedYear())
+                    .build());
+        });
 
-        books.add(BookDTO.builder()
-                .libraryId(1)
-                .author("George Orwell")
-                .title("1984")
-                .isbn("9780451524935")
-                .imageUrl(null)
-                .publisher("Signet Classics")
-                .shortDescription("A dystopian novel about totalitarian surveillance and control.")
-                .publishedYear(1949)
-                .build());
-
-        // TODO get it from database -> now mocked
-       return Optional.of(books);
+        return Optional.of(books);
     }
 }
