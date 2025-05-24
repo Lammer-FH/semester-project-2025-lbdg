@@ -9,19 +9,19 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:8100")
 @RestController
-@RequestMapping("/library-system/")
+@RequestMapping("/books")
 public class BookController {
 
     @Autowired
     private BookService bookService;
 
-    @PostMapping(path="books")
+    @PostMapping
     public void createBook(@RequestBody BookResponseDTO book)
     {
-        bookService.createBook(book);
+          bookService.createBook(book);
     }
 
-    @GetMapping(path="books")
+    @GetMapping
     public List<BookResponseDTO> getBooks()
     {
         return bookService.getBooks().orElse(null);
