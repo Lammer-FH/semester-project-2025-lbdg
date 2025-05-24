@@ -15,7 +15,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @PostMapping
+    /*@PostMapping
     public void createBook(@RequestBody BookResponseDTO book)
     {
           bookService.createBook(book);
@@ -25,5 +25,5 @@ public class BookController {
     public List<BookResponseDTO> getBooks()
     {
         return bookService.getBooks().orElse(null);
-    }
+    }*/
 }

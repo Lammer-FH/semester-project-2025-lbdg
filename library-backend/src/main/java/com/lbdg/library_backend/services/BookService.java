@@ -19,8 +19,9 @@ public class BookService {
     @Autowired
     private final BookRepository bookRepository;
 
-    public void createBook(BookResponseDTO book){
-        BookEntity bookEntity = BookEntity.builder()
+    /* public void createBook(BookRequestDTO book){
+        return null;
+        bookEntity = BookEntity.builder()
                 .author(book.getAuthor())
                 .title(book.getTitle())
                 .isbn(book.getIsbn())
@@ -51,5 +52,6 @@ public class BookService {
         });
 
         return Optional.of(books);
-    }
+
+    }*/
 }
