@@ -1,14 +1,13 @@
-package com.lbdg.library_backend.Services;
+package com.lbdg.library_backend.services;
 
-import com.lbdg.library_backend.DTOs.BookDTO;
-import com.lbdg.library_backend.Entities.BookEntity;
-import com.lbdg.library_backend.Repositories.BookRepository;
+import com.lbdg.library_backend.DTOs.responseDTOs.BookResponseDTO;
+import com.lbdg.library_backend.entities.BookEntity;
+import com.lbdg.library_backend.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +19,7 @@ public class BookService {
     @Autowired
     private final BookRepository bookRepository;
 
-    public void createBook(BookDTO book){
+    public void createBook(BookResponseDTO book){
         BookEntity bookEntity = BookEntity.builder()
                 .author(book.getAuthor())
                 .title(book.getTitle())
@@ -35,11 +34,11 @@ public class BookService {
         bookRepository.save(bookEntity);
     }
 
-    public Optional<List<BookDTO>> getBooks(){
-        List<BookDTO> books = new ArrayList<>();
+    public Optional<List<BookResponseDTO>> getBooks(){
+        List<BookResponseDTO> books = new ArrayList<>();
         List <BookEntity> bookEntities = bookRepository.findAll();
         bookEntities.forEach(bookEntity -> {
-            books.add(BookDTO.builder()
+            books.add(BookResponseDTO.builder()
                     .libraryId(bookEntity.getLibraryId())
                     .author(bookEntity.getAuthor())
                     .title(bookEntity.getTitle())

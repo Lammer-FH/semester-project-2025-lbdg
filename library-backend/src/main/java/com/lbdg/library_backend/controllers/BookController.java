@@ -1,9 +1,8 @@
-package com.lbdg.library_backend.Controller;
+package com.lbdg.library_backend.controllers;
 
-import com.lbdg.library_backend.DTOs.BookDTO;
-import com.lbdg.library_backend.Services.BookService;
+import com.lbdg.library_backend.DTOs.responseDTOs.BookResponseDTO;
+import com.lbdg.library_backend.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,13 +16,13 @@ public class BookController {
     private BookService bookService;
 
     @PostMapping(path="books")
-    public void createBook(@RequestBody BookDTO book)
+    public void createBook(@RequestBody BookResponseDTO book)
     {
         bookService.createBook(book);
     }
 
     @GetMapping(path="books")
-    public List<BookDTO> getBooks()
+    public List<BookResponseDTO> getBooks()
     {
         return bookService.getBooks().orElse(null);
     }

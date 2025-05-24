@@ -1,14 +1,13 @@
-package com.lbdg.library_backend.DTOs;
+package com.lbdg.library_backend.DTOs.responseDTOs;
 
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
-import org.springframework.web.multipart.MultipartFile;
 
 @Builder
 @Jacksonized
 @Value
-public class BookDTO {
+public class BookResponseDTO {
     private Integer libraryId;
     private String author;
     private String title;
