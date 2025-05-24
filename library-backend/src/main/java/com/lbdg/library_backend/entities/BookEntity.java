@@ -1,4 +1,4 @@
-package com.lbdg.library_backend.Entities;
+package com.lbdg.library_backend.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
