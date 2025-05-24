@@ -15,29 +15,32 @@ import lombok.NoArgsConstructor;
 public class BookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(nullable = false)
-    private Integer libraryId;
+    @ManyToOne
+    @JoinColumn(name = "library_id", nullable = false)
+    private LibraryEntity libraryEntity;
 
-    @Column(nullable = false)
+    @Column(name = "author", nullable = false)
     private String author;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "isbn", nullable = false)
     private String isbn;
 
     @Lob
+    @Column(name = "image")
     private byte[] image;
 
-    @Column(nullable = false)
+    @Column(name = "publisher", nullable = false)
     private String publisher;
 
-    @Column()
+    @Column(name = "short_description")
     private String shortDescription;
 
-    @Column()
+    @Column(name = "published_year")
     private Integer publishedYear;
 }
