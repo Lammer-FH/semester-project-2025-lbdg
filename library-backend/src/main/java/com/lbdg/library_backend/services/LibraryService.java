@@ -1,8 +1,12 @@
 package com.lbdg.library_backend.services;
 
+import com.lbdg.library_backend.DTOs.responseDTOs.BookResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.LibraryResponseDTO;
+import com.lbdg.library_backend.entities.BookEntity;
 import com.lbdg.library_backend.entities.LibraryEntity;
+import com.lbdg.library_backend.mappers.BookMapper;
 import com.lbdg.library_backend.mappers.LibraryMapper;
+import com.lbdg.library_backend.repositories.BookRepository;
 import com.lbdg.library_backend.repositories.LibraryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +22,8 @@ import java.util.List;
 public class LibraryService {
     @Autowired
     private final LibraryRepository libraryRepository;
+    @Autowired
+    private BookRepository bookRepository;
 
     public List<LibraryResponseDTO> getLibraries(){
         List<LibraryResponseDTO> libraries = new ArrayList<>();
@@ -28,5 +34,16 @@ public class LibraryService {
         }
 
         return libraries;
+    }
+
+    public List<BookResponseDTO> getBooksOfLibrary(Long libraryId) {
+        List<BookResponseDTO> books = new ArrayList<>();
+        List<BookEntity> bookEntities = bookRepository.findByLibraryEntityId(libraryId);
+
+        for (BookEntity bookEntity : bookEntities) {
+            books.add(BookMapper.toBookResponseDTO(bookEntity));
+        }
+
+        return books;
     }
 }
