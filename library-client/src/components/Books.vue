@@ -43,11 +43,11 @@
     </ion-content>
 
     <!-- searchbar -->
-    <ion-footer>
+    <!--<ion-footer>
       <ion-toolbar>
         <ion-searchbar></ion-searchbar>
       </ion-toolbar>
-    </ion-footer>
+    </ion-footer>-->
     </ion-page>
 </template>
 
