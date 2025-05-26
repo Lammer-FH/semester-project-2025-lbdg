@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
+import {RouteLocationNormalized, RouteRecordRaw} from 'vue-router';
 import Home from "@/components/Home.vue";
 import Login from "@/components/Login.vue";
 import Books from "@/components/Books.vue";
 import BookDetail from "@/components/BookDetail.vue";
+import {BookDTO} from "@/DTOs/bookDTO";
 
 const routes: Array<RouteRecordRaw> = [
   {
