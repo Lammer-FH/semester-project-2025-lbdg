@@ -16,6 +16,7 @@ paths:
   /libraries/{id}/books:
     get:
       tags:
+        - book
         - library
       summary: Get all books in a library
       parameters:
