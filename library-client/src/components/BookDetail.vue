@@ -38,7 +38,68 @@
             <p>{{ bookStore.current.shortDescription }}</p>
           </section>
 
-          <!-- footer row: ISBN left, status right -->
+          <section class="reviews" v-if="ratings.length">
+            <h3>Kundenrezensionen</h3>
+
+            <!-- star icons + average -->
+            <div class="stars">
+              <ion-icon
+                  v-for="n in fullStars"
+                  :key="`full-${n}`"
+                  :icon="star"
+              />
+              <ion-icon
+                  v-if="halfStar"
+                  :icon="starHalf"
+              />
+              <span class="avg">{{ avgRating.toFixed(1) }} von 5</span>
+            </div>
+
+            <div class="bars">
+              <div
+                  v-for="r in [5,4,3,2,1]"
+                  :key="r"
+                  class="bar-row"
+              >
+                <span class="bar-label">{{ r }} {{r === 1 ? 'Stern' : 'Sterne'}}</span>
+                <ion-progress-bar :value="ratingPercent[r]" />
+                <span class="bar-pct">
+                  {{ Math.round(ratingPercent[r] * 100) }}%
+                </span>
+              </div>
+            </div>
+            <button class="toggle-btn" @click="expanded = !expanded">
+              Rezensionen {{ expanded ? 'Einklappen' : 'Ausklappen' }}
+            </button>
+            <div v-if="expanded" class="review-list">
+              <div
+                  v-for="rev in ratings"
+                  :key="rev.id"
+                  class="review-card"
+              >
+                <div class="review-header">
+                  <div class="user-avatar">
+                    <ion-icon icon="person-circle-outline" />
+                  </div>
+                  <span class="user-id">User {{ rev.userId }}</span>
+                  <div class="user-stars">
+                    <ion-icon
+                        v-for="i in rev.rating"
+                        :key="`s${rev.id}-${i}`"
+                        :icon="star"
+                    />
+                    <ion-icon
+                        v-for="i in (5 - rev.rating)"
+                        :key="`o${rev.id}-${i}`"
+                        icon="star-outline"
+                    />
+                  </div>
+                </div>
+                <p class="comment">{{ rev.comment }}</p>
+              </div>
+            </div>
+          </section>
+
           <div class="footer">
             <p class="isbn-line">
               ISBN {{ bookStore.current.isbn }}
@@ -72,26 +133,60 @@ import {
   IonTitle,
   IonButtons,
   IonBackButton,
-  IonContent
+  IonContent,
+  IonIcon,
+  IonProgressBar
 } from '@ionic/vue'
 import { useBookStore } from '@/stores/bookStore'
-const bookStore = useBookStore()
-
-// relative import up out of src/ to project-root/assets
+import { onMounted, ref, computed } from 'vue'
+import { bookService } from '@/services/bookService'
+import type { RatingDTO } from '@/DTOs/ratingDTO'
+import { star, starHalf } from 'ionicons/icons'
 import defaultCover from '../../assets/book_cover.png'
+
+const bookStore = useBookStore()
+const ratings = ref<RatingDTO[]>([])
+const expanded = ref(false)
+
+onMounted(async () => {
+  if (bookStore.current) {
+    ratings.value = await bookService.getBooksOfLibrary(bookStore.current.id)
+  }
+})
+
+const avgRating = computed(() => {
+  if (!ratings.value.length) return 0
+  const sum = ratings.value.reduce((acc, r) => acc + r.rating, 0)
+  return sum / ratings.value.length
+})
+
+const fullStars = computed(() => Math.floor(avgRating.value))
+const halfStar  = computed(() => avgRating.value % 1 >= 0.5)
+
+const ratingPercent = computed(() => {
+  const counts: Record<number, number> = { 5:0,4:0,3:0,2:0,1:0 }
+  ratings.value.forEach(r => {
+    counts[r.rating] = (counts[r.rating] || 0) + 1
+  })
+  const total = ratings.value.length || 1
+  const pct: Record<number, number> = {}
+  Object.entries(counts).forEach(([k,v]) => {
+    pct[+k] = v / total
+  })
+  return pct
+})
 </script>
 
 <style scoped>
 .detail-page {
   padding: 16px;
-  background: #f4b980; /* match your app’s peach */
+  background: #f4b980;
 }
 
-/* center & constrain the white card */
 .detail-container {
   display: flex;
   justify-content: center;
-  padding: 0 16px; /* give some side gutters on mobile */
+  padding: 0 16px;
 }
 
 .detail-card {
@@ -100,11 +195,10 @@ import defaultCover from '../../assets/book_cover.png'
   border-radius: 8px;
   padding: 16px;
   max-width: 600px;
-  margin: 32px auto 0;   /* ← add top space */
+  margin: 32px auto 0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* top row */
 .top {
   display: flex;
   gap: 16px;
@@ -137,7 +231,6 @@ import defaultCover from '../../assets/book_cover.png'
   font-weight: normal;
 }
 
-/* metadata & description */
 .info, .desc {
   margin-bottom: 16px;
 }
@@ -153,12 +246,11 @@ import defaultCover from '../../assets/book_cover.png'
   line-height: 1.4;
 }
 
-/* footer row */
 .footer {
   display: flex;
   align-items: center;
-  gap: 12px;         /* space between ISBN and status */
-  flex-wrap: nowrap; /* prevent wrapping onto two lines */
+  gap: 12px;
+  flex-wrap: nowrap;
   margin-top: 24px;
 }
 
@@ -166,19 +258,19 @@ import defaultCover from '../../assets/book_cover.png'
   margin: 0;
   font-size: 0.8rem;
   color: #555;
-  white-space: nowrap; /* never break the ISBN text */
+  white-space: nowrap;
 }
 
 .status-line {
   display: flex;
   align-items: center;
-  gap: 4px;          /* tighten up circle to the text */
+  gap: 4px;
   margin: 0;
 }
 
 .status-text {
   font-size: 0.9rem;
-  white-space: nowrap; /* keep “Buch bereits…” all on one line */
+  white-space: nowrap;
 }
 
 .status-indicator {
@@ -191,10 +283,97 @@ import defaultCover from '../../assets/book_cover.png'
 .status-indicator.green { background: #4caf50; }
 .status-indicator.red   { background: #d32f2f; }
 
-/* fallback */
 .no-book {
   text-align: center;
   margin-top: 40px;
   color: #888;
+}
+.reviews {
+  margin: 24px 0;
+}
+.reviews h3 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 1.2rem;
+}
+.avg {
+  margin-left: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.bars {
+  margin-top: 12px;
+}
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+.bar-label {
+  width: 75px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.bar-pct {
+  width: 32px;
+  text-align: right;
+  font-size: 0.8rem;
+}
+.toggle-btn {
+  background: none;
+  border: none;
+  color: var(--ion-color-primary);
+  font-size: 0.9rem;
+  margin: 8px 0 16px;
+  cursor: pointer;
+}
+
+/* individual reviews */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-card {
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.user-avatar ion-icon {
+  font-size: 24px;
+  color: #666;
+}
+
+.user-id {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.user-stars ion-icon {
+  color: #f5a623;
+  font-size: 1rem;
+}
+
+.comment {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 </style>

@@ -1,12 +1,12 @@
 import axios from 'axios';
-import {BookDTO} from "@/DTOs/bookDTO";
+import {RatingDTO} from "@/DTOs/ratingDTO";
 
 const API_URL = 'http://localhost:8080/library-system/v1/books';
 
 export const bookService = {
 
-    async getBooksOfLibrary(bookId: number): Promise<BookDTO[]> {
-        const response = await axios.get<BookDTO[]>(`${API_URL}/${bookId}/ratings`);
+    async getBooksOfLibrary(bookId: number): Promise<RatingDTO[]> {
+        const response = await axios.get<RatingDTO[]>(`${API_URL}/${bookId}/ratings`);
         return response.data;
     },
 };
