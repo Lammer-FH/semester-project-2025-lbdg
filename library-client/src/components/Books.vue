@@ -17,29 +17,38 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
+      <div class="cards-container">
+        <!-- list Books of selected library -->
+        <ion-list v-if="books.length" class="book-list">
+          <ion-card
+              v-for="book in books"
+              :key="book.id"
+              class="book-card">
 
-      <!-- list Books of selected library -->
-      <ion-list v-if="books.length > 0" class="book-list">
-        <ion-card
-            v-for="book in books"
-            :key="book.id"
-            class="book-card">
-          <ion-grid>
-            <ion-row>
-              <ion-col size="4">
-                <img :src="book.image" alt="Cover" class="book-image" />
-              </ion-col>
-              <ion-col size="8">
-                <div class="book-meta">
-                  <p class="isbn">ISBN {{ book.isbn }}</p>
-                  <p class="author">{{ book.author }}</p>
-                  <h3 class="title">{{ book.title }}</h3>
-                </div>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-card>
-      </ion-list>
+            <!-- ISBN in the top-right corner -->
+            <div class="isbn">ISBN {{ book.isbn }}</div>
+
+            <!-- main body: image + text -->
+            <div class="card-body">
+              <img :src="book.image" alt="Cover" class="book-image" />
+              <div class="text">
+                <p class="author">{{ book.author ? book.author : 'Platzhalter Author' }}</p>
+                <h3 class="title">{{ book.title }}</h3>
+              </div>
+            </div>
+
+            <!-- status in the bottom-right corner -->
+            <div class="status">
+        <span class="status-text">
+          {{ book.available ? 'ausleihbar' : 'ausgeborgt' }}
+        </span>
+              <span
+                  class="status-indicator"
+                  :class="book.available ? 'green' : 'red'"></span>
+            </div>
+          </ion-card>
+        </ion-list>
+      </div>
     </ion-content>
 
     <!-- searchbar -->
@@ -99,41 +108,99 @@ async function loadBooksForLibrary(libraryId: number) {
     margin-top: 70px;
   }
 
-  .book-list {
-    margin-top: 1rem;
-  }
-
-  .book-card {
-    background-color: #fff9dc;
-    border-radius: 12px;
-    padding: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
   .book-image {
     width: 100%;
     border-radius: 8px;
   }
 
-  .book-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  .book-card {
+    position: relative;
+    background-color: #fef1bc;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 16px;
+    padding-top: 32px;
+    margin: 12px 0;
   }
 
   .isbn {
-    font-size: 0.8rem;
-    color: #666;
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 0.75rem;
+    color: #333;
   }
 
-  .author {
-    font-weight: bold;
-    font-size: 1rem;
-    margin-top: 4px;
+  .card-body {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .book-image {
+    width: 60px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 8px;
   }
 
   .title {
-    margin: 4px 0;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    margin: 0;
   }
+
+  .author {
+    font-size: 0.85rem;
+    margin: 0;
+    color: #555;
+  }
+
+  .status {
+    position: absolute;
+    bottom: 8px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .status-text {
+    font-size: 0.8rem;
+  }
+
+  .status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid #333;
+  }
+
+  .status-indicator.green {
+    background-color: #4caf50;
+  }
+
+  .status-indicator.red {
+    background-color: #d32f2f;
+  }
+
+  .cards-container {
+    background: #ffffff;      /* white box behind cards */
+    padding: 16px;            /* inner spacing */
+    border-radius: 8px;
+    margin: 16px auto;        /* vertical spacing + center horizontally */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .book-card {
+    /* keep your existing card styles */
+    /* e.g. background, border, padding… */
+    max-width: 100%;          /* so cards fill the container width */
+  }
+
 </style>

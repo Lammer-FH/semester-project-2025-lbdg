@@ -8,4 +8,5 @@ export interface BookDTO {
     publisher: string
     shortDescription: string
     publishedYear: number
+    available: boolean;
 }
