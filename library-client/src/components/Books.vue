@@ -23,7 +23,9 @@
           <ion-card
               v-for="book in books"
               :key="book.id"
-              class="book-card">
+              class="book-card"
+              button
+              @click="() => navigateTo(`/book/${book.id}`)">
 
             <!-- ISBN in the top-right corner -->
             <div class="isbn">ISBN {{ book.isbn }}</div>
@@ -73,6 +75,8 @@ import {onMounted, ref} from "vue";
 import {LibraryDTO} from "@/DTOs/libraryDTO";
 import {libraryService} from "@/services/librariesService";
 import {BookDTO} from "@/DTOs/bookDTO";
+import {useNavigation} from "@/services/navigationService";
+const { navigateTo } = useNavigation()
 const libraries = ref<LibraryDTO[]>([])
 const books = ref<BookDTO[]>([])
 const selectedLibrary = ref<number | null>(null)
