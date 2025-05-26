@@ -1,8 +1,9 @@
-import { useRouter } from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import type { RouteLocationRaw } from 'vue-router'
 
 export function useNavigation() {
     const router = useRouter()
+    const route = useRoute()
 
     /**
      * @param to  either a string path or a router location object
@@ -18,5 +19,34 @@ export function useNavigation() {
         })
     }
 
-    return { navigateTo }
+    /**
+     * Returns the "id" param from the current route
+     */
+    const getIdFromUrl = (paramName: string): number | undefined => {
+        const id = route.params[paramName] as string
+        console.log("id", route.params)
+        if (typeof id === 'string') {
+            const parsed = parseInt(id, 10)
+            return isNaN(parsed) ? undefined : parsed
+        }
+        return undefined
+    }
+
+    /**
+     * Sets the "id" param to the current route
+     */
+    const setIdToUrl = (id: number, routingName: string) => {
+        router.replace({
+            name: routingName,
+            params: {
+                libraryId: id.toString()
+            }
+        })
+    }
+
+    return {
+        navigateTo,
+        getIdFromUrl,
+        setIdToUrl
+    }
 }

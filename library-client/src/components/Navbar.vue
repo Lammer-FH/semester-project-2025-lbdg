@@ -4,7 +4,7 @@
       <ion-button class="logo-container" slot="start" fill="clear" @click="navigateTo('/home')">
         <img src="@/../assets/logo.png" alt="Logo" class="logo-img"/>
       </ion-button>
-      <ion-buttons class="search-book-button" slot="start" fill="clear" @click="navigateTo('/books')">
+      <ion-buttons v-if="userStore.name" class="search-book-button" slot="start" fill="clear" @click="navigateTo('/libraries/books')">
         <ion-icon :icon="searchCircleOutline" slot="icon-only" size="large"></ion-icon>
       </ion-buttons>
       <ion-title>

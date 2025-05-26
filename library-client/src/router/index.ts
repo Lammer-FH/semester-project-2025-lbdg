@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Login,
   },
   {
-    path: '/books',
+    path: '/libraries/:libraryId?/books',
     name: 'books',
     component: Books,
   },
