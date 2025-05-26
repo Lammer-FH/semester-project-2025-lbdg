@@ -4,6 +4,7 @@ import com.lbdg.library_backend.DTOs.responseDTOs.BookResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingResponseDTO;
 import com.lbdg.library_backend.entities.BookEntity;
 import com.lbdg.library_backend.entities.RatingEntity;
+import com.lbdg.library_backend.mappers.BookMapper;
 import com.lbdg.library_backend.mappers.RatingMapper;
 import com.lbdg.library_backend.repositories.BookRepository;
 import com.lbdg.library_backend.repositories.RatingRepository;
@@ -24,6 +25,18 @@ public class BookService {
     private final BookRepository bookRepository;
     @Autowired
     private final RatingRepository ratingRepository;
+
+    public Optional<BookResponseDTO> getBookDetails(Long bookId)
+    {
+        Optional<BookEntity> bookEntity = bookRepository.findById(bookId);
+
+        if(bookEntity.isEmpty()){
+            log.error("Book not found with id {}", bookId);
+            return Optional.empty();
+        }
+
+        return Optional.of(BookMapper.toBookResponseDTO(bookEntity.get()));
+    }
 
     public List<RatingResponseDTO> getRatingsOfBook(Long bookId)
     {
