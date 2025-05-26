@@ -10,7 +10,7 @@
     </ion-header>
 
     <ion-content class="detail-page">
-      <div v-if="bookStore.current" class="detail-container">
+      <div v-if="book" class="detail-container">
         <div class="detail-card">
           <div class="top">
             <img
@@ -19,18 +19,18 @@
                 class="detail-image"
             />
             <div class="heading">
-              <p class="author">{{ bookStore.current.author ?? 'Platzhalter Author' }}</p>
-              <h2 class="title">{{ bookStore.current.title }}</h2>
+              <p class="author">{{ book.author ?? 'Platzhalter Author' }}</p>
+              <h2 class="title">{{ book.title }}</h2>
               <section class="info">
-                <p>Erscheinungsjahr: {{ bookStore.current.publishedYear }}</p>
-                <p>Verlag: {{ bookStore.current.publisher }}</p>
+                <p>Erscheinungsjahr: {{ book?.publishedYear }}</p>
+                <p>Verlag: {{ book?.publisher }}</p>
               </section>
             </div>
           </div>
 
           <section class="desc">
             <h3>Beschreibung:</h3>
-            <p>{{ bookStore.current.shortDescription }}</p>
+            <p>{{ book.shortDescription }}</p>
           </section>
 
           <section class="reviews" v-if="ratings.length">
@@ -106,17 +106,17 @@
 
           <div class="footer">
             <p class="isbn-line">
-              ISBN {{ bookStore.current.isbn }}
+              ISBN {{ book.isbn }}
             </p>
             <div class="status-line">
               <span class="status-text">
-                {{ bookStore.current.available
+                {{ book.available
                   ? 'ausleihbar'
                   : 'Buch bereits ausgeliehen' }}
               </span>
               <span
                   class="status-indicator"
-                  :class="bookStore.current.available ? 'green' : 'red'"
+                  :class="book.available ? 'green' : 'red'"
               ></span>
             </div>
           </div>
@@ -142,7 +142,6 @@ import {
   IonProgressBar,
   IonButton
 } from '@ionic/vue'
-import { useBookStore } from '@/stores/bookStore'
 import { onMounted, ref, computed } from 'vue'
 import { bookService } from '@/services/bookService'
 import type { RatingDTO } from '@/DTOs/ratingDTO'
@@ -154,9 +153,11 @@ import {
   starOutline,
   personCircleOutline
 } from 'ionicons/icons'
-import defaultCover from '../../assets/book_cover.png'
+import defaultCover from '../../assets/default_book_cover.jpg'
+import {BookDTO} from "@/DTOs/bookDTO";
+import {useNavigation} from "@/services/navigationService";
 
-const bookStore = useBookStore()
+const book = ref<BookDTO>()
 const ratings = ref<RatingDTO[]>([])
 const expanded = ref(false)
 
@@ -168,10 +169,26 @@ const starOutlineIcon = starOutline
 const avatarIcon = personCircleOutline
 
 onMounted(async () => {
-  if (bookStore.current) {
-    ratings.value = await bookService.getBooksOfLibrary(bookStore.current.id)
+  const id = getIdFromUrl("id");
+
+  try {
+    if(id){
+      book.value = await bookService.getBookDetails(id)
+    }
+  } catch (err) {
+    console.error('Fehler beim Laden der Buch-Details:', err)
+  }
+
+  try {
+    if(id){
+      ratings.value = await bookService.getBooksOfLibrary(id)
+    }
+  } catch (err) {
+    console.error('Fehler beim Laden der Bibliotheken:', err)
   }
 })
+
+const { getIdFromUrl } = useNavigation()
 
 const avgRating = computed(() => {
   if (!ratings.value.length) return 0
@@ -210,7 +227,7 @@ const ratingPercent = computed(() => {
 
 .detail-card {
   background: #fff;
-  border: 1px solid #000;
+  border: 1px solid white;
   border-radius: 8px;
   padding: 16px;
   max-width: 600px;
