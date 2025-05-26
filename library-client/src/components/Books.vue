@@ -16,19 +16,21 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
-      <div class="cards-container">
-        <ion-list v-if="books.length" class="book-list">
+      <div v-if="books.length" class="cards-container">
+        <ion-list class="book-list">
           <ion-card
               v-for="book in books"
               :key="book.id"
               class="book-card"
               button
-              @click="go(book)">
+              @click="navigateTo({ name:'BookDetail', params:{ id: book.id } })">
 
             <div class="isbn">ISBN {{ book.isbn }}</div>
 
             <div class="card-body">
-              <img :src="book.image" alt="Cover" class="book-image" />
+              <img :src="defaultCover"
+                   alt="Cover"
+                   class="book-image" />
               <div class="text">
                 <p class="author">{{ book.author ? book.author : 'Platzhalter Author' }}</p>
                 <h3 class="title">{{ book.title }}</h3>
@@ -59,14 +61,15 @@ import {
   IonItem,
   IonSelect
 } from "@ionic/vue";
+import defaultCover from '../../assets/default_book_cover.jpg'
 import {onMounted, ref} from "vue";
 import {LibraryDTO} from "@/DTOs/libraryDTO";
 import {libraryService} from "@/services/librariesService";
 import {BookDTO} from "@/DTOs/bookDTO";
 import {useNavigation} from "@/services/navigationService";
-import { useBookStore } from '@/stores/bookStore'
 const { navigateTo } = useNavigation()
-const bookStore = useBookStore()
+const { setIdToUrl } = useNavigation()
+const { getIdFromUrl } = useNavigation()
 const libraries = ref<LibraryDTO[]>([])
 const books = ref<BookDTO[]>([])
 const selectedLibrary = ref<number | null>(null)
@@ -74,8 +77,17 @@ const selectedLibrary = ref<number | null>(null)
 onMounted(async () => {
   try {
     libraries.value = await libraryService.getLibraries();
+    const libraryId = getIdFromUrl("libraryId");
+    console.log("id", libraryId)
+    if (libraryId) {
+      const match = libraries.value.find(lib => lib.id === libraryId)
+      if (match) {
+        selectedLibrary.value = match.id
+        loadBooksForLibrary(libraryId)
+      }
+    }
   } catch (err) {
-    //error.value = err instanceof Error ? err.message : 'An error occurred';
+    console.error('Fehler beim Laden der Bibliotheken:', err)
   }
 })
 
@@ -83,8 +95,8 @@ function onLibraryChange(event: CustomEvent) {
   const selectedId = event.detail.value
   console.log('Ausgewählte Bibliothek ID:', selectedId)
 
-  // Optional: direkt Bücher laden
   loadBooksForLibrary(selectedId)
+  setIdToUrl(selectedId, "books");
 }
 
 async function loadBooksForLibrary(libraryId: number) {
@@ -93,11 +105,6 @@ async function loadBooksForLibrary(libraryId: number) {
   } catch (err) {
     console.error('Fehler beim Laden der Bücher:', err)
   }
-}
-
-function go(book: BookDTO) {
-  bookStore.select(book)
-  navigateTo({ name:'BookDetail', params:{ id: book.id } })
 }
 
 </script>
@@ -195,5 +202,4 @@ function go(book: BookDTO) {
     margin: 16px auto;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   }
-
 </style>
