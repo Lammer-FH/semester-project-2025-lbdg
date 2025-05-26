@@ -23,10 +23,7 @@
               :key="book.id"
               class="book-card"
               button
-              @click="() => navigateTo({
-                              name: 'BookDetail',
-                              state: { book }
-                            })">
+              @click="go(book)">
 
             <div class="isbn">ISBN {{ book.isbn }}</div>
 
@@ -67,7 +64,9 @@ import {LibraryDTO} from "@/DTOs/libraryDTO";
 import {libraryService} from "@/services/librariesService";
 import {BookDTO} from "@/DTOs/bookDTO";
 import {useNavigation} from "@/services/navigationService";
+import { useBookStore } from '@/stores/bookStore'
 const { navigateTo } = useNavigation()
+const bookStore = useBookStore()
 const libraries = ref<LibraryDTO[]>([])
 const books = ref<BookDTO[]>([])
 const selectedLibrary = ref<number | null>(null)
@@ -94,6 +93,11 @@ async function loadBooksForLibrary(libraryId: number) {
   } catch (err) {
     console.error('Fehler beim Laden der Bücher:', err)
   }
+}
+
+function go(book: BookDTO) {
+  bookStore.select(book)
+  navigateTo({ name:'BookDetail', params:{ id: book.id } })
 }
 
 </script>

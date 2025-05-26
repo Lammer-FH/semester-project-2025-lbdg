@@ -27,13 +27,10 @@ const routes: Array<RouteRecordRaw> = [
     component: Books,
   },
   {
-    path: '/book',
+    path: '/book/:id',
     name: 'BookDetail',
     component: BookDetail,
-    props: (route: RouteLocationNormalized) => ({
-      // TS doesn’t know about .state, so we cast to any
-      book: (route as any).state?.book as BookDTO
-    })
+    props: true
   }
 ]
 
