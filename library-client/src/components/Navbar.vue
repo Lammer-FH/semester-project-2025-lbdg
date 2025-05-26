@@ -1,11 +1,13 @@
 <template>
   <ion-header class="navbar">
     <ion-toolbar>
-      <ion-button class="logo-container" fill="clear" @click="navigateTo('/home')">
+      <ion-button class="logo-container" slot="start" fill="clear" @click="navigateTo('/home')">
         <img src="@/../assets/logo.png" alt="Logo" class="logo-img"/>
       </ion-button>
+      <ion-buttons class="search-book-button" slot="start" fill="clear" @click="navigateTo('/books')">
+        <ion-icon :icon="searchCircleOutline" slot="icon-only" size="large"></ion-icon>
+      </ion-buttons>
       <ion-title>
-
       </ion-title>
 
       <!-- User Icon-Button-->
@@ -48,7 +50,7 @@ import {
   IonList,
   IonItem
 } from '@ionic/vue';
-import { personCircleOutline } from 'ionicons/icons';
+import {personCircleOutline, searchCircleOutline} from 'ionicons/icons';
 import {ref} from "vue";
 import {useNavigation} from "@/services/navigationService";
 import {useUserStore} from "@/stores/userStore";

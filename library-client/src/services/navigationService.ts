@@ -4,7 +4,7 @@ export function useNavigation() {
     const router = useRouter()
 
     const navigateTo = (link: string) => {
-        if (link) router.push(link)
+        link ? router.push(link) : console.error('No link provided');
     }
 
     return { navigateTo }
