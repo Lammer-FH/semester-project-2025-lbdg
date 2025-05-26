@@ -4,9 +4,12 @@ import com.lbdg.library_backend.DTOs.responseDTOs.BookResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingResponseDTO;
 import com.lbdg.library_backend.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:8100")
 @RestController
@@ -15,6 +18,14 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BookResponseDTO> getBookDetails(@PathVariable Long id)
+    {
+        return bookService.getBookDetails(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
     @GetMapping("/{id}/ratings")
     public List<RatingResponseDTO> getRatingsOfBook(@PathVariable Long id)
