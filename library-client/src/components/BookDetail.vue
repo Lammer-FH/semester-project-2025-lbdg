@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/" />
+          <ion-back-button default-href="/books" />
         </ion-buttons>
         <ion-title>Details</ion-title>
       </ion-toolbar>
@@ -12,7 +12,6 @@
     <ion-content class="detail-page">
       <div v-if="bookStore.current" class="detail-container">
         <div class="detail-card">
-          <!-- top row: cover + author/title -->
           <div class="top">
             <img
                 :src="defaultCover"
@@ -22,7 +21,6 @@
             <div class="heading">
               <p class="author">{{ bookStore.current.author ?? 'Platzhalter Author' }}</p>
               <h2 class="title">{{ bookStore.current.title }}</h2>
-              <!-- metadata -->
               <section class="info">
                 <p>Erscheinungsjahr: {{ bookStore.current.publishedYear }}</p>
                 <p>Verlag: {{ bookStore.current.publisher }}</p>
@@ -30,9 +28,6 @@
             </div>
           </div>
 
-
-
-          <!-- description -->
           <section class="desc">
             <h3>Beschreibung:</h3>
             <p>{{ bookStore.current.shortDescription }}</p>
@@ -41,16 +36,15 @@
           <section class="reviews" v-if="ratings.length">
             <h3>Kundenrezensionen</h3>
 
-            <!-- star icons + average -->
             <div class="stars">
               <ion-icon
                   v-for="n in fullStars"
                   :key="`full-${n}`"
-                  :icon="star"
+                  :icon="starIcon"
               />
               <ion-icon
                   v-if="halfStar"
-                  :icon="starHalf"
+                  :icon="starHalfIcon"
               />
               <span class="avg">{{ avgRating.toFixed(1) }} von 5</span>
             </div>
@@ -61,16 +55,26 @@
                   :key="r"
                   class="bar-row"
               >
-                <span class="bar-label">{{ r }} {{r === 1 ? 'Stern' : 'Sterne'}}</span>
+                <span class="bar-label">{{ r }} {{ r === 1 ? 'Stern' : 'Sterne' }}</span>
                 <ion-progress-bar :value="ratingPercent[r]" />
                 <span class="bar-pct">
                   {{ Math.round(ratingPercent[r] * 100) }}%
                 </span>
               </div>
             </div>
-            <button class="toggle-btn" @click="expanded = !expanded">
-              Rezensionen {{ expanded ? 'Einklappen' : 'Ausklappen' }}
-            </button>
+
+            <ion-button
+                fill="clear"
+                class="toggle-btn"
+                @click="expanded = !expanded"
+                :aria-label="expanded ? 'Einklappen' : 'Ausklappen'"
+            >
+              <ion-icon
+                  :icon="expanded ? chevronUp : chevronDown"
+                  class="toggle-icon"
+              />
+            </ion-button>
+
             <div v-if="expanded" class="review-list">
               <div
                   v-for="rev in ratings"
@@ -79,19 +83,19 @@
               >
                 <div class="review-header">
                   <div class="user-avatar">
-                    <ion-icon icon="person-circle-outline" />
+                    <ion-icon :icon="avatarIcon" />
                   </div>
                   <span class="user-id">User {{ rev.userId }}</span>
                   <div class="user-stars">
                     <ion-icon
                         v-for="i in rev.rating"
                         :key="`s${rev.id}-${i}`"
-                        :icon="star"
+                        :icon="starIcon"
                     />
                     <ion-icon
                         v-for="i in (5 - rev.rating)"
                         :key="`o${rev.id}-${i}`"
-                        icon="star-outline"
+                        :icon="starOutlineIcon"
                     />
                   </div>
                 </div>
@@ -135,18 +139,33 @@ import {
   IonBackButton,
   IonContent,
   IonIcon,
-  IonProgressBar
+  IonProgressBar,
+  IonButton
 } from '@ionic/vue'
 import { useBookStore } from '@/stores/bookStore'
 import { onMounted, ref, computed } from 'vue'
 import { bookService } from '@/services/bookService'
 import type { RatingDTO } from '@/DTOs/ratingDTO'
-import { star, starHalf } from 'ionicons/icons'
+import {
+  chevronDownOutline,
+  chevronUpOutline,
+  star,
+  starHalf,
+  starOutline,
+  personCircleOutline
+} from 'ionicons/icons'
 import defaultCover from '../../assets/book_cover.png'
 
 const bookStore = useBookStore()
 const ratings = ref<RatingDTO[]>([])
 const expanded = ref(false)
+
+const chevronDown = chevronDownOutline
+const chevronUp = chevronUpOutline
+const starIcon = star
+const starHalfIcon = starHalf
+const starOutlineIcon = starOutline
+const avatarIcon = personCircleOutline
 
 onMounted(async () => {
   if (bookStore.current) {
@@ -231,66 +250,26 @@ const ratingPercent = computed(() => {
   font-weight: normal;
 }
 
-.info, .desc {
+.info,
+.desc {
   margin-bottom: 16px;
 }
 
-.info h3, .desc h3 {
+.desc h3 {
   margin: 0 0 8px;
   font-size: 1rem;
 }
 
-.info p, .desc p {
+.desc p {
   margin: 4px 0;
   font-size: 0.9rem;
   line-height: 1.4;
 }
 
-.footer {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: nowrap;
-  margin-top: 24px;
-}
-
-.isbn-line {
-  margin: 0;
-  font-size: 0.8rem;
-  color: #555;
-  white-space: nowrap;
-}
-
-.status-line {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin: 0;
-}
-
-.status-text {
-  font-size: 0.9rem;
-  white-space: nowrap;
-}
-
-.status-indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  border: 1px solid #333;
-}
-
-.status-indicator.green { background: #4caf50; }
-.status-indicator.red   { background: #d32f2f; }
-
-.no-book {
-  text-align: center;
-  margin-top: 40px;
-  color: #888;
-}
 .reviews {
   margin: 24px 0;
 }
+
 .reviews h3 {
   margin: 0 0 12px;
   font-size: 1rem;
@@ -302,6 +281,7 @@ const ratingPercent = computed(() => {
   gap: 4px;
   font-size: 1.2rem;
 }
+
 .avg {
   margin-left: 8px;
   font-size: 0.9rem;
@@ -311,32 +291,37 @@ const ratingPercent = computed(() => {
 .bars {
   margin-top: 12px;
 }
+
 .bar-row {
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 4px 0;
 }
+
 .bar-label {
   width: 75px;
   font-size: 0.8rem;
   white-space: nowrap;
 }
+
 .bar-pct {
   width: 32px;
   text-align: right;
   font-size: 0.8rem;
 }
+
 .toggle-btn {
-  background: none;
-  border: none;
-  color: var(--ion-color-primary);
-  font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
   margin: 8px 0 16px;
-  cursor: pointer;
 }
 
-/* individual reviews */
+.toggle-icon {
+  font-size: 1.5rem;
+  color: var(--ion-color-primary);
+}
+
 .review-list {
   display: flex;
   flex-direction: column;
@@ -375,5 +360,52 @@ const ratingPercent = computed(() => {
   margin: 0;
   font-size: 0.9rem;
   line-height: 1.4;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  margin-top: 24px;
+}
+
+.isbn-line {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #555;
+  white-space: nowrap;
+}
+
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-text {
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.status-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #333;
+}
+
+.status-indicator.green {
+  background: #4caf50;
+}
+
+.status-indicator.red {
+  background: #d32f2f;
+}
+
+.no-book {
+  text-align: center;
+  margin-top: 40px;
+  color: #888;
 }
 </style>
