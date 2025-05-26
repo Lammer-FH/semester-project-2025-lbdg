@@ -1,9 +1,10 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
+import {RouteLocationNormalized, RouteRecordRaw} from 'vue-router';
 import Home from "@/components/Home.vue";
 import Login from "@/components/Login.vue";
 import Books from "@/components/Books.vue";
 import BookDetail from "@/components/BookDetail.vue";
+import {BookDTO} from "@/DTOs/bookDTO";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -26,10 +27,13 @@ const routes: Array<RouteRecordRaw> = [
     component: Books,
   },
   {
-    path: '/book/:id',
+    path: '/book',
     name: 'BookDetail',
     component: BookDetail,
-    props: true
+    props: (route: RouteLocationNormalized) => ({
+      // TS doesn’t know about .state, so we cast to any
+      book: (route as any).state?.book as BookDTO
+    })
   }
 ]
 

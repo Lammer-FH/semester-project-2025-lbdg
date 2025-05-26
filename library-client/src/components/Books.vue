@@ -1,7 +1,6 @@
 <template>
   <ion-page class="home-page">
     <ion-content class="ion-padding">
-      <!-- select libraries -->
       <ion-item>
         <ion-label>Bibliothek</ion-label>
         <ion-select
@@ -18,19 +17,19 @@
         </ion-select>
       </ion-item>
       <div class="cards-container">
-        <!-- list Books of selected library -->
         <ion-list v-if="books.length" class="book-list">
           <ion-card
               v-for="book in books"
               :key="book.id"
               class="book-card"
               button
-              @click="() => navigateTo(`/book/${book.id}`)">
+              @click="() => navigateTo({
+                              name: 'BookDetail',
+                              state: { book }
+                            })">
 
-            <!-- ISBN in the top-right corner -->
             <div class="isbn">ISBN {{ book.isbn }}</div>
 
-            <!-- main body: image + text -->
             <div class="card-body">
               <img :src="book.image" alt="Cover" class="book-image" />
               <div class="text">
@@ -39,7 +38,6 @@
               </div>
             </div>
 
-            <!-- status in the bottom-right corner -->
             <div class="status">
         <span class="status-text">
           {{ book.available ? 'ausleihbar' : 'ausgeborgt' }}
@@ -52,14 +50,7 @@
         </ion-list>
       </div>
     </ion-content>
-
-    <!-- searchbar -->
-    <!--<ion-footer>
-      <ion-toolbar>
-        <ion-searchbar></ion-searchbar>
-      </ion-toolbar>
-    </ion-footer>-->
-    </ion-page>
+  </ion-page>
 </template>
 
 <script setup lang="ts">
@@ -194,17 +185,11 @@ async function loadBooksForLibrary(libraryId: number) {
   }
 
   .cards-container {
-    background: #ffffff;      /* white box behind cards */
-    padding: 16px;            /* inner spacing */
+    background: #ffffff;
+    padding: 16px;
     border-radius: 8px;
-    margin: 16px auto;        /* vertical spacing + center horizontally */
+    margin: 16px auto;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-
-  .book-card {
-    /* keep your existing card styles */
-    /* e.g. background, border, padding… */
-    max-width: 100%;          /* so cards fill the container width */
   }
 
 </style>
