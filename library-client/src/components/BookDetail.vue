@@ -144,7 +144,7 @@ import {
 } from '@ionic/vue'
 import { onMounted, ref, computed } from 'vue'
 import { bookService } from '@/services/bookService'
-import type { RatingDTO } from '@/DTOs/ratingDTO'
+import type { Rating } from '@/models/rating'
 import {
   chevronDownOutline,
   chevronUpOutline,
@@ -154,11 +154,11 @@ import {
   personCircleOutline
 } from 'ionicons/icons'
 import defaultCover from '../../assets/default_book_cover.jpg'
-import {BookDTO} from "@/DTOs/bookDTO";
+import {Book} from "@/models/book";
 import {useNavigation} from "@/services/navigationService";
 
-const book = ref<BookDTO>()
-const ratings = ref<RatingDTO[]>([])
+const book = ref<Book>()
+const ratings = ref<Rating[]>([])
 const expanded = ref(false)
 
 const chevronDown = chevronDownOutline

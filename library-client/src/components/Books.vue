@@ -63,15 +63,15 @@ import {
 } from "@ionic/vue";
 import defaultCover from '../../assets/default_book_cover.jpg'
 import {onMounted, ref} from "vue";
-import {LibraryDTO} from "@/DTOs/libraryDTO";
+import {Library} from "@/models/library";
 import {libraryService} from "@/services/librariesService";
-import {BookDTO} from "@/DTOs/bookDTO";
+import {Book} from "@/models/book";
 import {useNavigation} from "@/services/navigationService";
 const { navigateTo } = useNavigation()
 const { setIdToUrl } = useNavigation()
 const { getIdFromUrl } = useNavigation()
-const libraries = ref<LibraryDTO[]>([])
-const books = ref<BookDTO[]>([])
+const libraries = ref<Library[]>([])
+const books = ref<Book[]>([])
 const selectedLibrary = ref<number | null>(null)
 
 onMounted(async () => {

@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import type { BookDTO } from '@/DTOs/bookDTO'
+import type { Book } from '@/models/book'
 
 export const useBookStore = defineStore('book', {
-    state: () => ({ current: null as BookDTO | null }),
+    state: () => ({ current: null as Book | null }),
     actions: {
-        select(book: BookDTO) { this.current = book }
+        select(book: Book) { this.current = book }
     }
 })

@@ -1,4 +1,4 @@
-export interface RatingDTO {
+export interface Rating {
     id: number
     bookId: number
     userId: number

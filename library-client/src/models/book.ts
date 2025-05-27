@@ -1,4 +1,4 @@
-export interface BookDTO {
+export interface Book {
     id: number
     libraryId: number
     author: string
