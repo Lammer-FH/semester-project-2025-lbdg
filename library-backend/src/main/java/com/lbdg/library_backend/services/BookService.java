@@ -1,6 +1,7 @@
 package com.lbdg.library_backend.services;
 
-import com.lbdg.library_backend.DTOs.responseDTOs.BookResponseDTO;
+import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
+import com.lbdg.library_backend.DTOs.responseDTOs.BookListResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingResponseDTO;
 import com.lbdg.library_backend.entities.BookEntity;
 import com.lbdg.library_backend.entities.RatingEntity;
@@ -26,7 +27,7 @@ public class BookService {
     @Autowired
     private final RatingRepository ratingRepository;
 
-    public Optional<BookResponseDTO> getBookDetails(Long bookId)
+    public Optional<BookDetailsResponseDTO> getBookDetails(Long bookId)
     {
         Optional<BookEntity> bookEntity = bookRepository.findById(bookId);
 
@@ -35,7 +36,7 @@ public class BookService {
             return Optional.empty();
         }
 
-        return Optional.of(BookMapper.toBookResponseDTO(bookEntity.get()));
+        return Optional.of(BookMapper.toBookDetailsResponseDTO(bookEntity.get()));
     }
 
     public List<RatingResponseDTO> getRatingsOfBook(Long bookId)

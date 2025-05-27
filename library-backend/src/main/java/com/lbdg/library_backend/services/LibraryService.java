@@ -1,6 +1,7 @@
 package com.lbdg.library_backend.services;
 
-import com.lbdg.library_backend.DTOs.responseDTOs.BookResponseDTO;
+import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
+import com.lbdg.library_backend.DTOs.responseDTOs.BookListResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.LibraryResponseDTO;
 import com.lbdg.library_backend.entities.BookEntity;
 import com.lbdg.library_backend.entities.LibraryEntity;
@@ -36,12 +37,12 @@ public class LibraryService {
         return libraries;
     }
 
-    public List<BookResponseDTO> getBooksOfLibrary(Long libraryId) {
-        List<BookResponseDTO> books = new ArrayList<>();
+    public List<BookListResponseDTO> getBooksOfLibrary(Long libraryId) {
+        List<BookListResponseDTO> books = new ArrayList<>();
         List<BookEntity> bookEntities = bookRepository.findByLibraryEntityId(libraryId);
 
         for (BookEntity bookEntity : bookEntities) {
-            books.add(BookMapper.toBookResponseDTO(bookEntity));
+            books.add(BookMapper.toBookListResponseDTO(bookEntity));
         }
 
         return books;

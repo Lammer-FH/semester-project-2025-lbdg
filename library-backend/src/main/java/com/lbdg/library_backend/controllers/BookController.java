@@ -1,6 +1,6 @@
 package com.lbdg.library_backend.controllers;
 
-import com.lbdg.library_backend.DTOs.responseDTOs.BookResponseDTO;
+import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingResponseDTO;
 import com.lbdg.library_backend.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<BookResponseDTO> getBookDetails(@PathVariable Long id)
+    public ResponseEntity<BookDetailsResponseDTO> getBookDetails(@PathVariable Long id)
     {
         return bookService.getBookDetails(id)
                 .map(ResponseEntity::ok)

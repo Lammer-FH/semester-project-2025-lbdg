@@ -13,6 +13,4 @@ public class LibraryResponseDTO {
     private Long id;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("address")
-    private String address;
 }

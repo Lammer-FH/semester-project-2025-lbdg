@@ -1,6 +1,7 @@
 package com.lbdg.library_backend.controllers;
 
-import com.lbdg.library_backend.DTOs.responseDTOs.BookResponseDTO;
+import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
+import com.lbdg.library_backend.DTOs.responseDTOs.BookListResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.LibraryResponseDTO;
 import com.lbdg.library_backend.services.LibraryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class LibraryController {
     }
 
     @GetMapping("/{id}/books")
-    public List<BookResponseDTO> getBooksOfLibrary(@PathVariable Long id)
+    public List<BookListResponseDTO> getBooksOfLibrary(@PathVariable Long id)
     {
         return libraryService.getBooksOfLibrary(id);
     }
