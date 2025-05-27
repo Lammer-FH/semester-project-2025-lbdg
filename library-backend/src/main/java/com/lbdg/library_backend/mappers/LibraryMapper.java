@@ -10,7 +10,6 @@ public class LibraryMapper {
         return LibraryResponseDTO.builder()
                 .id(libraryEntity.getId())
                 .name(libraryEntity.getName())
-                .address(libraryEntity.getAddress())
                 .build();
     }
 }
