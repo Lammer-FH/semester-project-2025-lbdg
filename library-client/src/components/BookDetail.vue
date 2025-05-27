@@ -85,7 +85,7 @@
                   <div class="user-avatar">
                     <ion-icon :icon="avatarIcon" />
                   </div>
-                  <span class="user-id">User {{ rev.userId }}</span>
+                  <span class="user-name">{{ rev.userFullName }}</span>
                   <div class="user-stars">
                     <ion-icon
                         v-for="i in rev.rating"
@@ -363,7 +363,7 @@ const ratingPercent = computed(() => {
   color: #666;
 }
 
-.user-id {
+.user-name {
   font-weight: 600;
   font-size: 0.9rem;
 }
