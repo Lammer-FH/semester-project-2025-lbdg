@@ -1,17 +1,17 @@
 import axios from 'axios';
-import {LibraryDTO} from "@/DTOs/libraryDTO";
-import {BookDTO} from "@/DTOs/bookDTO";
+import {Library} from "@/models/library";
+import {Book} from "@/models/book";
 
 const API_URL = 'http://localhost:8080/library-system/v1/libraries';
 
 export const libraryService = {
-    async getLibraries(): Promise<LibraryDTO[]> {
-        const response = await axios.get<LibraryDTO[]>(API_URL);
+    async getLibraries(): Promise<Library[]> {
+        const response = await axios.get<Library[]>(API_URL);
         return response.data;
     },
 
-    async getBooksOfLibrary(libraryId: number): Promise<BookDTO[]> {
-        const response = await axios.get<BookDTO[]>(`${API_URL}/${libraryId}/books`);
+    async getBooksOfLibrary(libraryId: number): Promise<Book[]> {
+        const response = await axios.get<Book[]>(`${API_URL}/${libraryId}/books`);
         return response.data;
     },
 };
