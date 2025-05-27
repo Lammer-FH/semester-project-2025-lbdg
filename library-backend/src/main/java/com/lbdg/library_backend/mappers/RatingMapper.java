@@ -10,8 +10,8 @@ public class RatingMapper {
 
         return RatingResponseDTO.builder()
                 .id(ratingEntity.getId())
-                .bookId(ratingEntity.getBookEntity().getId())
                 .userId(ratingEntity.getUserEntity().getId())
+                .userFullName(ratingEntity.getUserEntity().getFirstName() + " " + ratingEntity.getUserEntity().getLastName())
                 .rating(ratingEntity.getRating())
                 .comment(ratingEntity.getComment())
                 .build();

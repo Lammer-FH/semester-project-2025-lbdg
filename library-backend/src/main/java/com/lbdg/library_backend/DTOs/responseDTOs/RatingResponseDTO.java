@@ -11,10 +11,10 @@ import lombok.extern.jackson.Jacksonized;
 public class RatingResponseDTO {
     @JsonProperty("id")
     private Long id;
-    @JsonProperty("bookId")
-    private Long bookId;
     @JsonProperty("userId")
     private Long userId;
+    @JsonProperty("userFullName")
+    private String userFullName;
     @JsonProperty("rating")
     private int rating;
     @JsonProperty("comment")
