@@ -11,7 +11,7 @@ export const bookService = {
         return response.data;
     },
 
-    async getBooksOfLibrary(bookId: number): Promise<Rating[]> {
+    async getRatingsForBook(bookId: number): Promise<Rating[]> {
         const response = await axios.get<Rating[]>(`${API_URL}/${bookId}/ratings`);
         return response.data;
     },

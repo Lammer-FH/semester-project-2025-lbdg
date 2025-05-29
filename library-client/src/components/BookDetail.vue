@@ -181,7 +181,7 @@ onMounted(async () => {
 
   try {
     if(id){
-      ratings.value = await bookService.getBooksOfLibrary(id)
+      ratings.value = await bookService.getRatingsForBook(id)
     }
   } catch (err) {
     console.error('Fehler beim Laden der Bibliotheken:', err)
