@@ -1,6 +1,5 @@
 package com.lbdg.library_backend.services;
 
-import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookListResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.LibraryResponseDTO;
 import com.lbdg.library_backend.entities.BookEntity;
