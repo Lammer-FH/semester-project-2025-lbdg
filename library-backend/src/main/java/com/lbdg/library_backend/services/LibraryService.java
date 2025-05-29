@@ -1,6 +1,5 @@
 package com.lbdg.library_backend.services;
 
-import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookListResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.LibraryResponseDTO;
 import com.lbdg.library_backend.entities.BookEntity;
@@ -28,7 +27,7 @@ public class LibraryService {
 
     public List<LibraryResponseDTO> getLibraries(){
         List<LibraryResponseDTO> libraries = new ArrayList<>();
-        List <LibraryEntity> libraryEntities = libraryRepository.findAll();
+        List<LibraryEntity> libraryEntities = libraryRepository.findAll();
 
         for (LibraryEntity libraryEntity : libraryEntities) {
             libraries.add(LibraryMapper.toLibraryResponseDTO(libraryEntity));
