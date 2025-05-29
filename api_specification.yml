@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: API for managing libraries, books, bookings, ratings, and users.
 servers:
-  - url: http://localhost:8080/api
+  - url: http://localhost:8080/library-system/v1
 tags:
   - name: book
   - name: library
@@ -16,6 +16,7 @@ paths:
   /libraries/{id}/books:
     get:
       tags:
+        - book
         - library
       summary: Get all books in a library
       parameters:
@@ -32,7 +33,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Book'
+                  $ref: '#/components/schemas/BookListResponseDTO'
                   
   /libraries:
     post:
@@ -48,6 +49,21 @@ paths:
       responses:
         '201':
           description: Library created
+          
+    get:
+      tags:
+        - library
+      summary: Get all libraries
+      responses:
+        '200':
+          description: List of libraries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LibraryResponseDTO'
+      
 
 
   /books/{id}/ratings:
@@ -70,7 +86,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Rating'
+                  $ref: '#/components/schemas/RatingResponseDTO'
 
   /books:
     post:
@@ -82,12 +98,29 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Book'
+              $ref: '#/components/schemas/BookDetailsResponseDTO'
       responses:
         '201':
           description: Book created
 
   /books/{id}:
+    get:
+      tags:
+        - book
+      summary: Get book details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Details of a book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookDetailsResponseDTO'
     put:
       tags:
         - book
@@ -103,7 +136,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Book'
+              $ref: '#/components/schemas/BookDetailsResponseDTO'
       responses:
         '200':
           description: Book updated
@@ -180,7 +213,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Rating'
+              $ref: '#/components/schemas/RatingResponseDTO'
       responses:
         '201':
           description: Rating submitted
@@ -201,7 +234,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Rating'
+              $ref: '#/components/schemas/RatingResponseDTO'
       responses:
         '200':
           description: Rating updated
@@ -240,13 +273,11 @@ paths:
 
 components:
   schemas:
-    Book:
+    BookDetailsResponseDTO:
       type: object
       properties:
         id:
-          type: string
-        library_id:
-          type: string
+          type: integer
         author:
           type: string
         title:
@@ -262,14 +293,31 @@ components:
           type: string
         published_year:
           type: integer
+        available:
+          type: boolean
+
+    BookListResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+        author:
+          type: string
+        title:
+          type: string
+        isbn:
+          type: string
+        image:
+          type: string
+          format: binary
+        available:
+          type: boolean
 
     Booking:
       type: object
       properties:
         id:
-          type: string
-        book_id:
-          type: string
+          type: integer
         user_id:
           type: string
         start_date:
@@ -279,7 +327,7 @@ components:
           type: string
           format: date
 
-    Rating:
+    RatingResponseDTO:
       type: object
       properties:
         id:
@@ -287,11 +335,15 @@ components:
         book_id:
           type: string
         user_id:
+          type: integer
+        userFullName:
           type: string
         rating:
           type: integer
           minimum: 1
           maximum: 5
+        comment:
+          type: string
 
     User:
       type: object
@@ -308,12 +360,10 @@ components:
           type: string
           enum: [user, librarian]
 
-    Library:
+    LibraryResponseDTO:
       type: object
       properties:
         id:
-          type: string
+          type: integer
         name:
-          type: string
-        address:
           type: string
