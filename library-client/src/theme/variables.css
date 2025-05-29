@@ -1,2 +1,8 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+
+ion-content {
+    //--background: #e0a96c;
+    --background: #f4c291;
+    --ion-text-color: black;
+}
