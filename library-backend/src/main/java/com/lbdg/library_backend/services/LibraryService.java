@@ -28,7 +28,7 @@ public class LibraryService {
 
     public List<LibraryResponseDTO> getLibraries(){
         List<LibraryResponseDTO> libraries = new ArrayList<>();
-        List <LibraryEntity> libraryEntities = libraryRepository.findAll();
+        List<LibraryEntity> libraryEntities = libraryRepository.findAll();
 
         for (LibraryEntity libraryEntity : libraryEntities) {
             libraries.add(LibraryMapper.toLibraryResponseDTO(libraryEntity));
