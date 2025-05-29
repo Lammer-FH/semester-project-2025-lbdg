@@ -13,7 +13,7 @@ footer: 'Advanced Web Frameworks 2025'
 ## Setup
 * run docker-compose.yml to create db
 * start backend: run LibraryBackendApplication
-* start frontend- "ionic start"
+* start frontend- "ionic serve"
 
 ---
 
