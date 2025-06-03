@@ -1,20 +1,13 @@
 package com.lbdg.library_backend.config;
 
-import com.lbdg.library_backend.entities.BookEntity;
-import com.lbdg.library_backend.entities.LibraryEntity;
-import com.lbdg.library_backend.entities.RatingEntity;
-import com.lbdg.library_backend.entities.UserEntity;
-import com.lbdg.library_backend.repositories.BookRepository;
-import com.lbdg.library_backend.repositories.LibraryRepository;
-import com.lbdg.library_backend.repositories.RatingRepository;
-import com.lbdg.library_backend.repositories.UserRepository;
+import com.lbdg.library_backend.entities.*;
+import com.lbdg.library_backend.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Configuration
@@ -30,9 +23,9 @@ public class DBPopulator {
     private UserRepository userRepository;
 
     @Bean
-    public CommandLineRunner populateLibrariesAndBooks(LibraryRepository libraryRepository, BookRepository bookRepository) {
+    public CommandLineRunner populateLibrariesAndBooks(LibraryRepository libraryRepository, BookRepository bookRepository, BookingRepository bookingRepository) {
         return args -> {
-            if (libraryRepository.count() > 0 || bookRepository.count() > 0 || ratingRepository.count() > 0 || userRepository.count() > 0) {
+            if (libraryRepository.count() > 0 || bookRepository.count() > 0 || ratingRepository.count() > 0 || userRepository.count() > 0 || bookingRepository.count() > 0) {
                 return;
             }
             // Create users
@@ -59,6 +52,11 @@ public class DBPopulator {
                     "Teile sind schwer verständlich und hätten\n" +
                     "besser erklärt sein können."));
 
+            LocalDate currentDate = LocalDate.now();
+
+            BookingEntity booking1 = bookingRepository.save(new BookingEntity(null, book1, user1, currentDate, currentDate.plusDays(14)));
+
+            BookingEntity booking2 = bookingRepository.save(new BookingEntity(null, book2, user2, currentDate.minusDays(15), currentDate.minusDays(1)));
         };
     }
 }

@@ -9,18 +9,18 @@ import java.util.Base64;
 
 public class BookMapper {
 
-    public static BookListResponseDTO toBookListResponseDTO(BookEntity bookEntity) {
+    public static BookListResponseDTO toBookListResponseDTO(BookEntity bookEntity, boolean isAvailable) {
         return BookListResponseDTO.builder()
                 .id(bookEntity.getId())
                 .author(bookEntity.getAuthor())
                 .title(bookEntity.getTitle())
                 .image(bookEntity.getImage() != null ? Base64.getEncoder().encodeToString(bookEntity.getImage()) : null)
                 .isbn(bookEntity.getIsbn())
-                .available(false) // needs to be calculated
+                .available(isAvailable)
                 .build();
     }
 
-    public static BookDetailsResponseDTO toBookDetailsResponseDTO(BookEntity bookEntity) {
+    public static BookDetailsResponseDTO toBookDetailsResponseDTO(BookEntity bookEntity, boolean isAvailable) {
         return BookDetailsResponseDTO.builder()
                 .id(bookEntity.getId())
                 .author(bookEntity.getAuthor())
@@ -30,7 +30,7 @@ public class BookMapper {
                 .isbn(bookEntity.getIsbn())
                 .publishedYear(bookEntity.getPublishedYear())
                 .shortDescription(bookEntity.getShortDescription())
-                .available(false) // needs to be calculated
+                .available(isAvailable)
                 .build();
     }
 }
