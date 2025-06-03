@@ -8,12 +8,14 @@ import com.lbdg.library_backend.entities.RatingEntity;
 import com.lbdg.library_backend.mappers.BookMapper;
 import com.lbdg.library_backend.mappers.RatingMapper;
 import com.lbdg.library_backend.repositories.BookRepository;
+import com.lbdg.library_backend.repositories.BookingRepository;
 import com.lbdg.library_backend.repositories.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +28,8 @@ public class BookService {
     private final BookRepository bookRepository;
     @Autowired
     private final RatingRepository ratingRepository;
+    @Autowired
+    private final BookingRepository bookingRepository;
 
     public Optional<BookDetailsResponseDTO> getBookDetails(Long bookId)
     {
@@ -36,7 +40,10 @@ public class BookService {
             return Optional.empty();
         }
 
-        return Optional.of(BookMapper.toBookDetailsResponseDTO(bookEntity.get()));
+        LocalDate currentDate = LocalDate.now();
+        boolean isAvailable = bookingRepository.isBookCurrentlyAvailable(currentDate, bookEntity.get().getId());
+
+        return Optional.of(BookMapper.toBookDetailsResponseDTO(bookEntity.get(), isAvailable));
     }
 
     public List<RatingResponseDTO> getRatingsOfBook(Long bookId)

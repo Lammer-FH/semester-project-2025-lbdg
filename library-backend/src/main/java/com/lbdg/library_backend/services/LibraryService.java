@@ -7,12 +7,14 @@ import com.lbdg.library_backend.entities.LibraryEntity;
 import com.lbdg.library_backend.mappers.BookMapper;
 import com.lbdg.library_backend.mappers.LibraryMapper;
 import com.lbdg.library_backend.repositories.BookRepository;
+import com.lbdg.library_backend.repositories.BookingRepository;
 import com.lbdg.library_backend.repositories.LibraryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,8 @@ public class LibraryService {
     private final LibraryRepository libraryRepository;
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private BookingRepository bookingRepository;
 
     public List<LibraryResponseDTO> getLibraries(){
         List<LibraryResponseDTO> libraries = new ArrayList<>();
@@ -39,9 +43,11 @@ public class LibraryService {
     public List<BookListResponseDTO> getBooksOfLibrary(Long libraryId) {
         List<BookListResponseDTO> books = new ArrayList<>();
         List<BookEntity> bookEntities = bookRepository.findByLibraryEntityId(libraryId);
+        LocalDate currentDate = LocalDate.now();
 
         for (BookEntity bookEntity : bookEntities) {
-            books.add(BookMapper.toBookListResponseDTO(bookEntity));
+            boolean isAvailable = bookingRepository.isBookCurrentlyAvailable(currentDate, bookEntity.getId());
+            books.add(BookMapper.toBookListResponseDTO(bookEntity, isAvailable));
         }
 
         return books;
