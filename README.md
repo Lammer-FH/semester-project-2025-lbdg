@@ -68,7 +68,7 @@ Frontend: List view of books for a selected library, including availability stat
 As a user, I want to view the ratings and reviews of a book so that I can choose a highly rated one.
 
 **Affected Resources:**  
-`book`
+`book`, `rating`
 
 **Planned Implementation:**  
 GET `/books/{id}/ratings`
@@ -85,33 +85,33 @@ As a librarian, I want to create, edit and delete a book
 `book`
 
 **Planned Implementation:**  
-GET, POST `/books` | PUT, DELETE `/books/{id}`
-Frontend: Booking form where a logged-in user selects a book and submits a reservation request.
+POST `/books` | GET, PUT, DELETE `/books/{id}`
+Frontend: Book form, where a librarian can create, edit or delete a book.
 
 ---
 
-### 🟥 User Story #5 – Create or Edit a Booking
+### 🟥 User Story #5 – Manage Bookings
 
 **Story:**  
-As a librarian, I want to get, create or edit a booking so that I can manage the bookings.
+As a librarian, I want to create, edit and delete a booking so that I can manage the bookings of a specific book. Accessed at the book details page.
 
 **Affected Resources:**  
-`bookings`
+`book`, `booking`, `user`
 
 **Planned Implementation:**  
-GET, POST `/books/{id}/bookings` | PUT, DELETE `/bookings/{id}`
-Frontend: User’s account page with a list of current bookings, including options to edit or cancel.
+POST `/books/{id}/bookings` | GET, PUT, DELETE `/bookings/{id}`
+Frontend: Bookings form, where a librarian can create, edit or delete a booking. Accessed at the book details page.
 
 ---
 
-### 🟥 User Story #6 - Create, Edit, or Delete a Rating
+### 🟥 User Story #6 - Manage and submit Ratings
 
 **Story:**  
-As a user, I want to get, create, edit, or delete a rating for a book so that I can share my opinion and help others.
+As a user, I want to get, create, edit, and delete a rating for a book so that I can share my opinion and help others.
 
 **Affected Resources:**  
-`ratings`, `books`, `users`
+`rating`, `book`, `user`
 
 **Planned Implementation:**  
-GET, POST `/ratings` | PUT `/ratings/{id}` | DELETE `/ratings/{id}`
-Frontend: Rating form on the book detail page; user can add a new rating or manage their existing ratings.
+POST `/ratings` | GET, PUT, DELETE `/ratings/{id}`
+Frontend: Ratings form, where a student can create, edit or delete a rating. Accessed at the book details page in the ratings section.
