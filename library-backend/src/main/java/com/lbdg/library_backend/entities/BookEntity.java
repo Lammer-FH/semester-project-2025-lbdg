@@ -52,5 +52,5 @@ public class BookEntity {
 
     @OneToMany(mappedBy = "bookEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
-    private List<BookingEntity> bookings = new ArrayList<>();;
+    private List<BookingEntity> bookings = new ArrayList<>();
 }
