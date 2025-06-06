@@ -17,7 +17,9 @@ import com.lbdg.library_backend.repositories.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -75,13 +77,20 @@ public class BookService {
 
     public void editBook(Long bookId, BookEditRequestDTO bookEditRequestDTO) {
         BookEntity bookEntity = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> {
+                    log.error("Book not found with id {}", bookId);
+                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+                });
 
         BookMapper.updateBookEntityFromBookEditRequestDTO(bookEntity, bookEditRequestDTO);
         bookRepository.save(bookEntity);
     }
 
     public void deleteBook(Long bookId) {
+        if (!bookRepository.existsById(bookId)) {
+            log.error("Book not found with id {}", bookId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book with ID " + bookId + " not found");
+        }
         bookRepository.deleteById(bookId);
     }
 
