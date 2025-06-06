@@ -1,7 +1,11 @@
 package com.lbdg.library_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -41,4 +45,8 @@ public class BookEntity {
 
     @Column(name = "published_year")
     private Integer publishedYear;
+
+    @OneToMany(mappedBy = "bookEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    private List<RatingEntity> ratings = new ArrayList<>();;
 }

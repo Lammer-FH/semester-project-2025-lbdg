@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Configuration
@@ -37,10 +38,10 @@ public class DBPopulator {
             LibraryEntity library1 = libraryRepository.save(new LibraryEntity(null, "Technikum Wien", "Höchstädtplatz 6, 1200 Wien"));
             LibraryEntity library2 = libraryRepository.save(new LibraryEntity(null, "Universität Wien", "Universitätsring 1, 1010 Wien"));
 
-            BookEntity book1 = bookRepository.save(new BookEntity(null, library1, "Ulrich Breymann", "C++ programmieren", "918-3-16-148410-0", null, "Carl Hansen", "Ein praxisnahes Lehrbuch, das C++-Grundlagen und fortgeschrittene Themen verständlich vermittelt.", 2023));
-            BookEntity book2 = bookRepository.save(new BookEntity(null, library2, "Ulrich Breymann", "C++ programmieren", "918-3-16-148410-0", null, "Carl Hansen", "Ein praxisnahes Lehrbuch, das C++-Grundlagen und fortgeschrittene Themen verständlich vermittelt.", 2023));
+            BookEntity book1 = bookRepository.save(new BookEntity(null, library1, "Ulrich Breymann", "C++ programmieren", "918-3-16-148410-0", null, "Carl Hansen", "Ein praxisnahes Lehrbuch, das C++-Grundlagen und fortgeschrittene Themen verständlich vermittelt.", 2023, new ArrayList<>()));
+            BookEntity book2 = bookRepository.save(new BookEntity(null, library2, "Ulrich Breymann", "C++ programmieren", "918-3-16-148410-0", null, "Carl Hansen", "Ein praxisnahes Lehrbuch, das C++-Grundlagen und fortgeschrittene Themen verständlich vermittelt.", 2023, new ArrayList<>()));
 
-            BookEntity book3 = bookRepository.save(new BookEntity(null, library1, "Daniel Basler", "Neuronale Netze mit C# programmieren", "978-3-55-54435-4", null, "Carl Hansen", "Mit praktischen Beispielen für Machine Learning im Unternehmenseinsatz", 2021));
+            BookEntity book3 = bookRepository.save(new BookEntity(null, library1, "Daniel Basler", "Neuronale Netze mit C# programmieren", "978-3-55-54435-4", null, "Carl Hansen", "Mit praktischen Beispielen für Machine Learning im Unternehmenseinsatz", 2021, new ArrayList<>()));
 
             RatingEntity rating1 = ratingRepository.save(new RatingEntity(null, book1, user3, 5, "Super Buch!\n" +
                     "Sehr verständlich erklärt, tolle Beispiele –\n" +
