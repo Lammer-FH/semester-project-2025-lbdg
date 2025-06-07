@@ -16,6 +16,12 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
+      <ion-button
+          v-if="selectedLibrary != null && userStore.role == 'LIBRARIAN'"
+          button
+          @click="navigateTo({ name:'BookForm', params:{ libraryId: selectedLibrary } })">
+        <ion-icon :icon="addIcon"></ion-icon>
+      </ion-button>
       <div v-if="books.length" class="cards-container">
         <ion-list class="book-list">
           <ion-card
@@ -36,7 +42,6 @@
                 <h3 class="title">{{ book.title }}</h3>
               </div>
             </div>
-
             <div class="status">
         <span class="status-text">
           {{ book.available ? 'ausleihbar' : 'ausgeborgt' }}
@@ -59,20 +64,27 @@ import {
   IonSelectOption,
   IonLabel,
   IonItem,
-  IonSelect
+  IonSelect,
+  IonIcon
 } from "@ionic/vue";
+import {
+  add
+} from 'ionicons/icons'
 import defaultCover from '../../assets/default_book_cover.jpg'
 import {onMounted, ref} from "vue";
 import {Library} from "@/models/library";
 import {libraryService} from "@/services/librariesService";
 import {Book} from "@/models/book";
 import {useNavigation} from "@/services/navigationService";
+import {useUserStore} from "@/stores/userStore";
 const { navigateTo } = useNavigation()
 const { setIdToUrl } = useNavigation()
 const { getIdFromUrl } = useNavigation()
 const libraries = ref<Library[]>([])
 const books = ref<Book[]>([])
 const selectedLibrary = ref<number | null>(null)
+const addIcon = add
+const userStore = useUserStore()
 
 onMounted(async () => {
   try {

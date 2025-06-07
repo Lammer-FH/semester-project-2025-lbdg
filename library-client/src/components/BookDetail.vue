@@ -27,10 +27,19 @@
               </section>
             </div>
           </div>
-
+          <ion-button
+              v-if="userStore.role == 'LIBRARIAN'"
+              @click="navigateTo({ name:'BookForm', params:{ id: book.id, libraryId: book.libraryId} })">
+            <ion-icon :icon="editIcon"></ion-icon>
+          </ion-button>
+          <ion-button
+              v-if="userStore.role == 'LIBRARIAN'"
+              color="danger"
+              @click="confirmDelete(book.id, book.libraryId)">
+            <ion-icon :icon="deleteIcon"></ion-icon>
+          </ion-button>
           <section class="desc">
             <h3>Beschreibung:</h3>
-            <p>{{ book.shortDescription }}</p>
           </section>
 
           <section class="reviews" v-if="ratings.length">
@@ -151,15 +160,23 @@ import {
   star,
   starHalf,
   starOutline,
-  personCircleOutline
+  personCircleOutline,
+  pencil,
+  trash,
 } from 'ionicons/icons'
 import defaultCover from '../../assets/default_book_cover.jpg'
 import {Book} from "@/models/book";
 import {useNavigation} from "@/services/navigationService";
+import router from "@/router";
+import {useUserStore} from "@/stores/userStore";
+const { navigateTo } = useNavigation()
+const { getIdFromUrl } = useNavigation()
+const userStore = useUserStore()
 
 const book = ref<Book>()
 const ratings = ref<Rating[]>([])
 const expanded = ref(false)
+const id = getIdFromUrl("id");
 
 const chevronDown = chevronDownOutline
 const chevronUp = chevronUpOutline
@@ -167,9 +184,10 @@ const starIcon = star
 const starHalfIcon = starHalf
 const starOutlineIcon = starOutline
 const avatarIcon = personCircleOutline
+const editIcon = pencil
+const deleteIcon = trash
 
 onMounted(async () => {
-  const id = getIdFromUrl("id");
 
   try {
     if(id){
@@ -188,7 +206,12 @@ onMounted(async () => {
   }
 })
 
-const { getIdFromUrl } = useNavigation()
+async function confirmDelete(bookId: number, libraryId: number) {
+  if (confirm("Buch wirklich löschen?")) {
+    await bookService.deleteBook(bookId);
+    router.push(`/libraries/${libraryId}/books`);
+  }
+}
 
 const avgRating = computed(() => {
   if (!ratings.value.length) return 0
