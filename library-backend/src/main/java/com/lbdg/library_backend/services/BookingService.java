@@ -48,6 +48,12 @@ public class BookingService {
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking with ID " + bookingId + " not found");
                 });
 
+        // check for overlap
+        if (bookingRepository.getBookingOverlaps(bookingId, bookingEntity.getBookEntity().getId(), bookingEditRequestDTO.getStartDate(), bookingEditRequestDTO.getEndDate()) > 0) {
+            log.warn("Overlap detected");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Overlap detected");
+        }
+
         BookingMapper.updateBookingEntityFromBookingEditRequestDTO(bookingEntity, bookingEditRequestDTO);
         bookingRepository.save(bookingEntity);
     }
@@ -75,7 +81,13 @@ public class BookingService {
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
                 });
         BookingEntity bookingEntity = BookingMapper.toBookingEntity(bookingCreateRequestDTO, bookEntity, userEntity);
-        bookingEntity = bookingRepository.save(bookingEntity);
+
+        // check for overlap
+        if (bookingRepository.getBookingOverlaps(0L, bookingEntity.getBookEntity().getId(), bookingEntity.getStartDate(), bookingEntity.getEndDate()) > 0) {
+            log.warn("Overlap detected");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Overlap detected");
+        }
+        bookingRepository.save(bookingEntity);
         return bookingEntity.getId();
     }
 
