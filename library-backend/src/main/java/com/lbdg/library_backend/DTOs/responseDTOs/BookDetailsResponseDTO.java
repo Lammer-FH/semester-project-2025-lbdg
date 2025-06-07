@@ -11,6 +11,8 @@ import lombok.extern.jackson.Jacksonized;
 public class BookDetailsResponseDTO {
     @JsonProperty("id")
     private Long id;
+    @JsonProperty("libraryId")
+    private Long libraryId;
     @JsonProperty("author")
     private String author;
     @JsonProperty("title")
