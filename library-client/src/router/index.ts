@@ -4,6 +4,7 @@ import Home from "@/components/Home.vue";
 import Login from "@/components/Login.vue";
 import Books from "@/components/Books.vue";
 import BookDetail from "@/components/BookDetail.vue";
+import BookForm from "@/components/BookForm.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,7 +31,12 @@ const routes: Array<RouteRecordRaw> = [
     name: 'BookDetail',
     component: BookDetail,
     props: true
-  }
+  },
+  {
+    path: '/libraries/:libraryId?/books/form/:id?',
+    name: 'BookForm',
+    component: BookForm,
+  },
 ]
 
 const router = createRouter({
