@@ -27,6 +27,7 @@ public class BookMapper {
     public static BookDetailsResponseDTO toBookDetailsResponseDTO(BookEntity bookEntity, boolean isAvailable) {
         return BookDetailsResponseDTO.builder()
                 .id(bookEntity.getId())
+                .libraryId(bookEntity.getLibraryEntity().getId())
                 .author(bookEntity.getAuthor())
                 .title(bookEntity.getTitle())
                 .image(bookEntity.getImage() != null ? Base64.getEncoder().encodeToString(bookEntity.getImage()) : null)
