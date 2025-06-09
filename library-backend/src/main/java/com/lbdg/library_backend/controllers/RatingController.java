@@ -22,7 +22,7 @@ public class RatingController {
     public ResponseEntity<RatingEditResponseDTO> getEditableRatingDetails(@PathVariable Long id)
     {
         RatingEditResponseDTO ratingEditResponseDTO = ratingService.getEditableRatingDetails(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ratingEditResponseDTO);
+        return ResponseEntity.status(200).body(ratingEditResponseDTO);
     }
 
     @PutMapping("/{id}")

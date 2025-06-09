@@ -21,7 +21,7 @@ public class BookingController {
     public ResponseEntity<BookingEditResponseDTO> getEditableBookingDetails(@PathVariable Long id)
     {
         BookingEditResponseDTO bookingEditResponseDTO = bookingService.getEditableBookingDetails(id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookingEditResponseDTO);
+        return ResponseEntity.status(200).body(bookingEditResponseDTO);
     }
 
     @PutMapping("/{id}")
