@@ -89,6 +89,7 @@
               </ion-button>
 
               <ion-button
+                  v-if="userStore.role === 'STUDENT'"
                   fill="outline"
                   size="small"
                   class="add-rating-btn"
@@ -178,29 +179,33 @@
             </ion-toolbar>
           </ion-header>
           <ion-content class="ion-padding">
-            <form @submit.prevent="saveRating">
-              <ion-item lines="none">
-                <ion-label>Sterne</ion-label>
-                <div class="star-select">
-                  <ion-icon
-                      v-for="n in 5"
-                      :key="n"
-                      :icon="n <= formRating ? starIcon : starOutlineIcon"
-                      class="star-select-icon"
-                      @click="formRating = n"
-                  />
-                </div>
-              </ion-item>
-              <ion-item>
-                <ion-textarea v-model="formComment" label="Kommentar"
-                              label-placement="floating"
-                              fill="outline"
-                              placeholder="Enter text"/>
-              </ion-item>
-              <ion-button expand="block" type="submit">
-                {{ editingRatingId ? 'Aktualisieren' : 'Speichern' }}
-              </ion-button>
-            </form>
+            <div class="form-wrapper">
+              <form @submit.prevent="saveRating">
+                <ion-item lines="none">
+                  <ion-label>Sterne</ion-label>
+                  <div class="star-select">
+                    <ion-icon
+                        v-for="n in 5"
+                        :key="n"
+                        :icon="n <= formRating ? starIcon : starOutlineIcon"
+                        class="star-select-icon"
+                        @click="formRating = n"
+                    />
+                  </div>
+                </ion-item>
+                <ion-item>
+                  <!-- ignore the error on rows, its the only way to set the height of the textarea -->
+                  <ion-textarea v-model="formComment" label="Kommentar"
+                                label-placement="floating"
+                                fill="outline"
+                                class="comment-textarea"
+                                rows="8"/>
+                </ion-item>
+                <ion-button expand="block" type="submit">
+                  {{ editingRatingId ? 'Aktualisieren' : 'Speichern' }}
+                </ion-button>
+              </form>
+            </div>
           </ion-content>
         </ion-page>
       </ion-modal>
@@ -558,8 +563,13 @@ async function confirmDelete(bookId: number, libraryId: number) {
 .own-actions {
   margin-left: auto;
   display: flex;
-  gap: 4px;
-  align-items: center;
+  gap: 0px;       /* shrink gap between the two buttons */
+}
+
+.own-actions ion-button {
+  /* optional: tighten the button padding so they take up even less space */
+  --padding-start: 2px;
+  --padding-end:   2px;
 }
 
 .star-select {
@@ -577,5 +587,16 @@ async function confirmDelete(bookId: number, libraryId: number) {
 
 .star-select-icon:hover {
   transform: scale(1.2);
+}
+
+.form-wrapper {
+  background: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  /* optional drop-shadow for emphasis */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* if you want it centered or constrained in width: */
+  max-width: 600px;
+  margin: 0 auto;
 }
 </style>
