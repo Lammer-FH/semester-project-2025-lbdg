@@ -23,7 +23,6 @@ import {useNavigation} from "@/services/navigationService";
 import {useUserStore} from "@/stores/userStore";
 import {onMounted, ref} from "vue";
 import {Roles, User} from "@/models/user";
-import {userService} from "@/services/userService";
 const users = ref<User[]>([])
 
 const { navigateTo } = useNavigation()
@@ -37,7 +36,7 @@ function selectUser(id: number, name: string, role: string) {
 onMounted(async () => {
 
   try {
-    users.value = await userService.getUsers()
+    users.value = await userStore.getUsers()
   } catch (err) {
     console.error('Fehler beim Laden der User:', err)
   }

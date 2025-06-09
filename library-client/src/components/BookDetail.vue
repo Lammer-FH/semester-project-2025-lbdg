@@ -221,8 +221,8 @@ import {
   IonModal, IonItem, IonLabel, IonTextarea
 } from '@ionic/vue'
 import { onMounted, ref, computed } from 'vue'
-import { bookService } from '@/services/bookService'
-import { ratingService } from '@/services/ratingService'
+import { useBookStore } from '@/stores/bookStore'
+import { useRatingStore } from '@/stores/ratingStore'
 import type { Rating } from '@/models/rating'
 import type { Book } from '@/models/book'
 import defaultCover from '../../assets/default_book_cover.jpg'
@@ -240,6 +240,8 @@ const { navigateTo, getIdFromUrl } = useNavigation()
 const userStore = useUserStore()
 
 // State
+const bookStore = useBookStore()
+const ratingStore = useRatingStore()
 const book = ref<Book>()
 const ratings = ref<Rating[]>([])
 const expanded = ref(false)
@@ -263,12 +265,12 @@ const deleteIcon = trash
 const id = getIdFromUrl('id')
 async function refreshRatings() {
   if (!book.value) return
-  ratings.value = await bookService.getRatingsForBook(book.value.id)
+  ratings.value = await bookStore.fetchRatings(book.value.id)
 }
 
 onMounted(async () => {
   if (id) {
-    book.value = await bookService.getBookDetails(id)
+    book.value = await bookStore.fetchDetails(id)
     await refreshRatings()
   }
 })
@@ -312,12 +314,12 @@ async function saveRating() {
   }
   try {
     if (editingRatingId.value) {
-      await ratingService.updateRating(editingRatingId.value, {
+      await ratingStore.updateRating(editingRatingId.value, {
         rating: formRating.value,
         comment: formComment.value
       })
     } else {
-      await ratingService.createRating({
+      await ratingStore.createRating({
         bookId: book.value.id,
         userId: userStore.id,
         rating: formRating.value,
@@ -333,14 +335,14 @@ async function saveRating() {
 
 async function confirmDeleteRating(ratingId: number) {
   if (confirm('Bewertung wirklich löschen?')) {
-    await ratingService.deleteRating(ratingId)
+    await ratingStore.deleteRating(ratingId)
     await refreshRatings()
   }
 }
 
 async function confirmDelete(bookId: number, libraryId: number) {
   if (confirm('Buch wirklich löschen?')) {
-    await bookService.deleteBook(bookId)
+    await bookStore.deleteBook(bookId)
     router.push(`/libraries/${libraryId}/books`)
   }
 }

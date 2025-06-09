@@ -73,7 +73,7 @@ import {
 import defaultCover from '../../assets/default_book_cover.jpg'
 import {onMounted, ref} from "vue";
 import {Library} from "@/models/library";
-import {libraryService} from "@/services/librariesService";
+import {useLibraryStore} from "@/stores/libraryStore";
 import {Book} from "@/models/book";
 import {useNavigation} from "@/services/navigationService";
 import {useUserStore} from "@/stores/userStore";
@@ -85,10 +85,11 @@ const books = ref<Book[]>([])
 const selectedLibrary = ref<number | null>(null)
 const addIcon = add
 const userStore = useUserStore()
+const libraryStore = useLibraryStore()
 
 onMounted(async () => {
   try {
-    libraries.value = await libraryService.getLibraries();
+    libraries.value = await libraryStore.fetchAll();
     const libraryId = getIdFromUrl("libraryId");
     console.log("id", libraryId)
     if (libraryId) {
@@ -113,7 +114,7 @@ function onLibraryChange(event: CustomEvent) {
 
 async function loadBooksForLibrary(libraryId: number) {
   try {
-    books.value = await libraryService.getBooksOfLibrary(libraryId)
+    books.value = await libraryStore.fetchBooks(libraryId)
   } catch (err) {
     console.error('Fehler beim Laden der Bücher:', err)
   }
