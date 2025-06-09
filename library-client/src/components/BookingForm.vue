@@ -104,20 +104,23 @@
 
 <script setup lang='ts'>
 import {onMounted, ref} from 'vue';
-import {bookService} from '@/services/bookService';
-import {userService} from '@/services/userService';
+import {useBookStore} from '@/stores/bookStore';
+import {useUserStore} from '@/stores/userStore';
+import {useBookingStore} from '@/stores/bookingStore';
 import {useNavigation} from "@/services/navigationService";
 import ImageCoverComponent from "@/components/ImageCoverComponent.vue";
 import defaultCover from "../../assets/default_book_cover.jpg";
 import {Book} from "@/models/book";
+import {User} from "@/models/user";
 import {searchCircleOutline} from "ionicons/icons";
 import {IonIcon} from "@ionic/vue";
 import { IonDatetime, IonDatetimeButton, IonModal } from '@ionic/vue';
-
-
-
 import { defineComponent } from 'vue';
 const { getIdFromUrl } = useNavigation();
+
+const bookStore = useBookStore();
+const userStore = useUserStore();
+const bookingStore = useBookingStore();
 
 const bookId = getIdFromUrl("bookId");
 
@@ -131,13 +134,13 @@ const selectedUser = ref(null);
 onMounted(async () => {
   try {
     if(bookId) {
-      book.value = await bookService.getBookDetails(bookId)
+      book.value = await bookStore.fetchDetails(bookId)
     }
   } catch (err) {
     console.error('Fehler beim Laden der Buch-Details:', err)
   }
   try{
-    users.value = await userService.getUsers();
+    users.value = await userStore.getUsers();
   }
   catch (err){
     console.error('Fehler beim Laden der Users:', err)
@@ -154,7 +157,7 @@ const selectUser = (user) => {
 
 const confirmBooking = async () => {
   if (!selectedUser.value || !startDate.value || !endDate.value) return;
-  await bookingService.createBooking({
+  await bookingStore.createBooking({
     bookId,
     userId: selectedUser.value.id,
     startDate: startDate.value,
