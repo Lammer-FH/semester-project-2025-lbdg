@@ -114,19 +114,30 @@
           </section>
 
           <div class="footer">
-            <p class="isbn-line">
-              ISBN {{ book.isbn }}
-            </p>
-            <div class="status-line">
-              <span class="status-text">
-                {{ book.available
-                  ? 'ausleihbar'
-                  : 'Buch bereits ausgeliehen' }}
-              </span>
-              <span
-                  class="status-indicator"
-                  :class="book.available ? 'green' : 'red'"
-              ></span>
+            <div class="left">
+                <p class="isbn-line">
+                  ISBN {{ book.isbn }}
+                </p>
+            </div>
+            <div class="right">
+                <div class="status-line">
+                  <span class="status-text">
+                    {{ book.available
+                      ? 'ausleihbar'
+                      : 'Buch bereits ausgeliehen' }}
+                  </span>
+                  <span
+                      class="status-indicator"
+                      :class="book.available ? 'green' : 'red'"
+                  ></span>
+                </div>
+                 <ion-button
+                    size="small"
+                    @click="navigateTo({ name:'BookingForm', params:{ bookId: book.id} })"
+                 >
+
+                    {{ book.available ? 'Buchung vornehmen' : 'Buchung bearbeiten' }}
+                </ion-button>
             </div>
           </div>
         </div>
@@ -404,10 +415,23 @@ const ratingPercent = computed(() => {
 
 .footer {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 12px;
   flex-wrap: nowrap;
   margin-top: 24px;
+}
+
+.left {
+  display: flex;
+  flex: 1;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  height: 100%;
 }
 
 .isbn-line {
@@ -441,6 +465,13 @@ const ratingPercent = computed(() => {
 
 .status-indicator.red {
   background: #d32f2f;
+}
+
+.booking-button {
+  margin-top: 4px;
+  text-transform: none !important;
+  --background: #007bff;
+  --color: white;
 }
 
 .no-book {
