@@ -56,9 +56,11 @@ import {
 import {onMounted, ref} from "vue";
 import {Book} from "@/models/book";
 import {useNavigation} from "@/services/navigationService";
-import {bookService} from "@/services/bookService";
+import { useBookStore } from '@/stores/bookStore'
 import router from "@/router";
 const { getIdFromUrl } = useNavigation()
+
+const bookStore = useBookStore()
 const book = ref<Book>()
 const id = getIdFromUrl("id");
 const libraryId = getIdFromUrl("libraryId");
@@ -78,7 +80,7 @@ onMounted(async () => {
 
   try {
     if(id){
-      book.value = await bookService.getBookEditDetails(id);
+      book.value = await bookStore.fetchEditDetails(id)
       form.value = book.value;
     }
   } catch (err) {
@@ -100,12 +102,12 @@ async function submitForm() {
   if (id == null) {
     let new_id;
     // eslint-disable-next-line prefer-const
-    new_id = await bookService.createBook(newBook);
+    new_id = await bookStore.createBook(newBook);
     if (new_id > 0) {
       router.push(`/book/${new_id}`);
     }
   } else {
-    await bookService.editBook(id, newBook);
+    await bookStore.updateBook(id, newBook);
     router.push(`/book/${id}`);
   }
 
