@@ -563,7 +563,7 @@ async function confirmDelete(bookId: number, libraryId: number) {
 .own-actions {
   margin-left: auto;
   display: flex;
-  gap: 0px;       /* shrink gap between the two buttons */
+  gap: 0;       /* shrink gap between the two buttons */
 }
 
 .own-actions ion-button {
