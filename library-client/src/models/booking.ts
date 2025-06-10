@@ -1,5 +1,6 @@
 export interface Booking {
-    userFullName: string
-    startDate: Date
-    endDate: Date
+    userId: number | null
+    bookId: number
+    startDate: string
+    endDate: string
 }

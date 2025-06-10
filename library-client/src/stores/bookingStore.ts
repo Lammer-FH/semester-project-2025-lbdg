@@ -34,6 +34,13 @@ export const useBookingStore = defineStore('booking', {
         },
 
         /**
+         * Update an existing booking; returns success flag
+         */
+        async updateBooking(id: number, payload: Pick<Booking, any>): Promise<boolean> {
+            return await bookingService.editBooking(id, payload)
+        },
+
+        /**
          * Delete an existing booking by ID
          */
         async deleteBooking(id: number): Promise<boolean> {

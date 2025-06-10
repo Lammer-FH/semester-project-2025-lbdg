@@ -27,14 +27,14 @@ export const bookingService = {
 
     },
 
-    /*async editBooking(bookId: number, book: Pick<Book, any>): Promise<boolean> {
+    async editBooking(bookingId: number, booking: Pick<Booking, any>): Promise<boolean> {
         try {
-            await axios.put(`${API_URL}/${bookId}`, book);
+            await axios.put(`${API_URL}/${bookingId}`, booking);
             return true;
         } catch (error) {
             return false;
         }
-    },*/
+    },
 
     async deleteBooking(bookingId: number): Promise<boolean> {
         try {

@@ -22,5 +22,8 @@ export const useUserStore = defineStore('user', {
         async getUsers(): Promise<User[]> {
             return await userService.getUsers();
         },
+        async getStudents(): Promise<User[]> {
+            return await userService.getStudents();
+        }
     },
 })
