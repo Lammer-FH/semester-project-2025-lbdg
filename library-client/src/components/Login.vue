@@ -3,15 +3,19 @@
     <ion-content class="login-page" fullscreen>
       <div class="container">
         <h2>Wählen Sie einen User aus</h2>
-
-        <ion-button v-for="user in users"
-                    :key="user.id"
-                    @click="selectUser(user.id, user.userFullName, user.role)"
-                    expand="block"
-                    class="user-button"
-                    fill="clear">
-          {{ Roles[user.role as keyof typeof Roles] }} {{ user.userFullName }}
-        </ion-button>
+        <div v-if="users">
+          <ion-button v-for="user in users"
+                      :key="user.id"
+                      @click="selectUser(user.id, user.userFullName, user.role)"
+                      expand="block"
+                      class="user-button"
+                      fill="clear">
+            {{ Roles[user.role as keyof typeof Roles] }} {{ user.userFullName }}
+          </ion-button>
+        </div>
+        <div v-else>
+          <p>Keine User gefunden</p>
+        </div>
       </div>
     </ion-content>
   </ion-page>
@@ -34,12 +38,7 @@ function selectUser(id: number, name: string, role: string) {
 }
 
 onMounted(async () => {
-
-  try {
-    users.value = await userStore.getUsers()
-  } catch (err) {
-    console.error('Fehler beim Laden der User:', err)
-  }
+users.value = await userStore.getUsers()
 
 })
 

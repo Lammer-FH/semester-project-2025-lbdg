@@ -77,14 +77,11 @@ const form = ref<Partial<Book>>({
 });
 
 onMounted(async () => {
-
-  try {
-    if(id){
-      book.value = await bookStore.fetchEditDetails(id)
+  if(id){
+    book.value = await bookStore.fetchEditDetails(id)
+    if(book.value){
       form.value = book.value;
     }
-  } catch (err) {
-    console.error('Fehler beim Laden der Buch Daten:', err)
   }
 })
 
@@ -107,10 +104,11 @@ async function submitForm() {
       router.push(`/book/${new_id}`);
     }
   } else {
-    await bookStore.updateBook(id, newBook);
-    router.push(`/book/${id}`);
+    const response = await bookStore.updateBook(id, newBook);
+    if (response) {
+      router.push(`/book/${id}`);
+    }
   }
-
 }
 
 </script>

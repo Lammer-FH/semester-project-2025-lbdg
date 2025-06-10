@@ -88,19 +88,14 @@ const userStore = useUserStore()
 const libraryStore = useLibraryStore()
 
 onMounted(async () => {
-  try {
-    libraries.value = await libraryStore.fetchAll();
-    const libraryId = getIdFromUrl("libraryId");
-    console.log("id", libraryId)
-    if (libraryId) {
-      const match = libraries.value.find(lib => lib.id === libraryId)
-      if (match) {
-        selectedLibrary.value = match.id
-        loadBooksForLibrary(libraryId)
-      }
+  libraries.value = await libraryStore.fetchAll();
+  const libraryId = getIdFromUrl("libraryId");
+  if (libraryId && libraries.value) {
+    const match = libraries.value.find(lib => lib.id === libraryId)
+    if (match) {
+      selectedLibrary.value = match.id
+      loadBooksForLibrary(libraryId)
     }
-  } catch (err) {
-    console.error('Fehler beim Laden der Bibliotheken:', err)
   }
 })
 
@@ -113,11 +108,7 @@ function onLibraryChange(event: CustomEvent) {
 }
 
 async function loadBooksForLibrary(libraryId: number) {
-  try {
-    books.value = await libraryStore.fetchBooks(libraryId)
-  } catch (err) {
-    console.error('Fehler beim Laden der Bücher:', err)
-  }
+  books.value = await libraryStore.fetchBooks(libraryId)
 }
 
 </script>
