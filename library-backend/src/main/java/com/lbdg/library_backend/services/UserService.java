@@ -32,7 +32,7 @@ public class UserService {
         List<UserEntity> userEntities = userRepository.findAll();
 
         for (UserEntity userEntity : userEntities) {
-            users.add(UserMapper.toRatingResponseDTO(userEntity));
+            users.add(UserMapper.toUserResponseDTO(userEntity));
         }
 
         return users;

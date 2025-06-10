@@ -7,7 +7,7 @@ import com.lbdg.library_backend.entities.UserEntity;
 
 public class UserMapper {
 
-    public static UserResponseDTO toRatingResponseDTO(UserEntity userEntity) {
+    public static UserResponseDTO toUserResponseDTO(UserEntity userEntity) {
 
         return UserResponseDTO.builder()
                 .id(userEntity.getId())
