@@ -1,4 +1,21 @@
+# The Librarian service
 
+---
+
+This repository contains a full-stack web application implementing a Librarian service.
+
+### 📚 Project Idea
+
+A web application for managing a library system (Librarian System), focusing on the central organization of books, bookings, and users.
+
+The goal is to implement the typical processes of a library in a modern, responsive web application – featuring a **REST API**, **clean code**, and **clear design**. 
+
+For more details on the project idea, resources, and user stories, please check the details you can find below.
+___
+
+# Tech Stack
+* Spring Boot Backend
+* Ionic Vue.js Frontend
 ---
 marp: true
 author: Team LBDG
@@ -99,7 +116,7 @@ As a librarian, I want to create, edit and delete a booking so that I can manage
 `book`, `booking`, `user`
 
 **Planned Implementation:**  
-POST `/books/{id}/bookings` | GET, PUT, DELETE `/bookings/{id}`
+POST `/bookings` | PUT, DELETE `/bookings/{id}` | GET `/bookings/{id}/edit`
 Frontend: Bookings form, where a librarian can create, edit or delete a booking. Accessed at the book details page.
 
 ---
@@ -113,5 +130,5 @@ As a user, I want to get, create, edit, and delete a rating for a book so that I
 `rating`, `book`, `user`
 
 **Planned Implementation:**  
-POST `/ratings` | GET, PUT, DELETE `/ratings/{id}`
+POST `/ratings` | PUT, DELETE `/ratings/{id}` | GET `/books/{id}/ratings`
 Frontend: Ratings form, where a student can create, edit or delete a rating. Accessed at the book details page in the ratings section.
