@@ -11,8 +11,8 @@ import java.time.LocalDate;
 @Jacksonized
 @Value
 public class BookingEditResponseDTO {
-    @JsonProperty("userFullName")
-    private String userFullName;
+    @JsonProperty("userId")
+    private Long userId;
     @JsonProperty("startDate")
     private LocalDate startDate;
     @JsonProperty("endDate")

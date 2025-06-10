@@ -49,9 +49,14 @@ public class BookService {
         }
 
         LocalDate currentDate = LocalDate.now();
-        boolean isAvailable = bookingRepository.isBookCurrentlyAvailable(currentDate, bookEntity.get().getId());
-
-        return Optional.of(BookMapper.toBookDetailsResponseDTO(bookEntity.get(), isAvailable));
+        Optional<Long> activeBookingId =  bookingRepository.findActiveBookingId(currentDate, bookEntity.get().getId());
+        Boolean isAvailable = true;
+        Long bookingId = null;
+        if (activeBookingId.isPresent()) {
+            isAvailable = false;
+            bookingId = activeBookingId.get();
+        }
+        return Optional.of(BookMapper.toBookDetailsResponseDTO(bookEntity.get(), isAvailable, bookingId));
     }
 
     public List<RatingResponseDTO> getRatingsOfBook(Long bookId)
