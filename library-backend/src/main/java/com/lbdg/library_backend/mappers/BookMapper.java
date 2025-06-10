@@ -24,7 +24,7 @@ public class BookMapper {
                 .build();
     }
 
-    public static BookDetailsResponseDTO toBookDetailsResponseDTO(BookEntity bookEntity, boolean isAvailable) {
+    public static BookDetailsResponseDTO toBookDetailsResponseDTO(BookEntity bookEntity, boolean isAvailable, Long bookingId) {
         return BookDetailsResponseDTO.builder()
                 .id(bookEntity.getId())
                 .libraryId(bookEntity.getLibraryEntity().getId())
@@ -36,6 +36,7 @@ public class BookMapper {
                 .publishedYear(bookEntity.getPublishedYear())
                 .shortDescription(bookEntity.getShortDescription())
                 .available(isAvailable)
+                .bookingId(bookingId)
                 .build();
     }
 

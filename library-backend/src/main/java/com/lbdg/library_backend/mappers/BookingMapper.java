@@ -10,7 +10,7 @@ import com.lbdg.library_backend.entities.UserEntity;
 public class BookingMapper {
     public static BookingEditResponseDTO toBookingEditResponseDTO(BookingEntity bookingEntity) {
         return BookingEditResponseDTO.builder()
-                .userFullName(bookingEntity.getUserEntity().getFirstName() + " " + bookingEntity.getUserEntity().getLastName())
+                .userId(bookingEntity.getUserEntity().getId())
                 .startDate(bookingEntity.getStartDate())
                 .endDate(bookingEntity.getEndDate())
                 .build();

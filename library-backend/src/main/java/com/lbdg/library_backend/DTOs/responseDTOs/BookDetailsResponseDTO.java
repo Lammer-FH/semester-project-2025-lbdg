@@ -29,4 +29,6 @@ public class BookDetailsResponseDTO {
     private Integer publishedYear;
     @JsonProperty("available")
     private Boolean available;
+    @JsonProperty("bookingId")
+    private Long bookingId;
 }

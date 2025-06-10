@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,8 +46,10 @@ public class LibraryService {
         List<BookEntity> bookEntities = bookRepository.findByLibraryEntityId(libraryId);
         LocalDate currentDate = LocalDate.now();
 
+        Boolean isAvailable;
         for (BookEntity bookEntity : bookEntities) {
-            boolean isAvailable = bookingRepository.isBookCurrentlyAvailable(currentDate, bookEntity.getId());
+            Optional<Long> activeBookingId =  bookingRepository.findActiveBookingId(currentDate, bookEntity.getId());
+            isAvailable = activeBookingId.isEmpty();
             books.add(BookMapper.toBookListResponseDTO(bookEntity, isAvailable));
         }
 
