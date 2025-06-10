@@ -99,7 +99,7 @@
               </ion-button>
             </div>
 
-            <div v-if="expanded" class="review-list">
+            <div v-if="expanded && ratings" class="review-list">
               <div
                   v-for="rev in ratings"
                   :key="rev.id"
@@ -271,7 +271,9 @@ async function refreshRatings() {
 onMounted(async () => {
   if (id) {
     book.value = await bookStore.fetchDetails(id)
-    await refreshRatings()
+    if(book.value) {
+      await refreshRatings()
+    }
   }
 })
 
@@ -312,25 +314,27 @@ async function saveRating() {
     console.error("no user id");
     return;
   }
-  try {
+    let response;
     if (editingRatingId.value) {
-      await ratingStore.updateRating(editingRatingId.value, {
+      response = await ratingStore.updateRating(editingRatingId.value, {
         rating: formRating.value,
         comment: formComment.value
-      })
+      });
     } else {
-      await ratingStore.createRating({
+      response = await ratingStore.createRating({
         bookId: book.value.id,
         userId: userStore.id,
         rating: formRating.value,
         comment: formComment.value
-      })
+      });
     }
-    await refreshRatings()
-    closeModal()
-  } catch (err) {
-    console.error('Fehler beim Speichern der Bewertung:', err)
-  }
+
+    if (response === null) {
+      return;
+    }
+
+    await refreshRatings();
+    closeModal();
 }
 
 async function confirmDeleteRating(ratingId: number) {
