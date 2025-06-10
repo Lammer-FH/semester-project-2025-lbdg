@@ -3,6 +3,7 @@ package com.lbdg.library_backend.services;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookListResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.LibraryResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.UserResponseDTO;
+import com.lbdg.library_backend.DTOs.responseDTOs.UserStudentResponseDTO;
 import com.lbdg.library_backend.entities.BookEntity;
 import com.lbdg.library_backend.entities.LibraryEntity;
 import com.lbdg.library_backend.entities.UserEntity;
@@ -35,6 +36,17 @@ public class UserService {
         }
 
         return users;
+    }
+
+    public List<UserStudentResponseDTO> getStudents(){
+        List<UserStudentResponseDTO> students = new ArrayList<>();
+        List<UserEntity> userEntities = userRepository.findAll();
+
+        for (UserEntity userEntity : userEntities) {
+            students.add(UserMapper.toUserStudentResponseDTO(userEntity));
+        }
+
+        return students;
     }
 
 }
