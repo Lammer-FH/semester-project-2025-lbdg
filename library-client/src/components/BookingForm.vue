@@ -17,88 +17,55 @@
             <p class="isbn">{{ book?.isbn}}</p>
           </div>
         </div>
-
-
-
-      <!-- Suche -->
-      <!--<h2 class="label">Kunden suchen</h2>
-      <div class="search-section">
-        <div class="search-input-wrapper">
-          <ion-icon :icon="searchCircleOutline" class="search-icon"></ion-icon>
-          <input v-model="searchQuery" placeholder="Mustermann" class="search-input" />
-        </div>
-
-        <button class="search-button">
-          <ion-icon :icon="searchCircleOutline" class="icon-only"></ion-icon>
-        </button>
-
-        <button class="filter-button">
-          Filter
-        </button>
-      </div>-->
-
-        <!-- Datum -->
-        <div class="timeSelection">
-          <div>
-            <p class="label">Start Datum</p>
-            <ion-datetime-button datetime="datetime"></ion-datetime-button>
-            <ion-modal :keep-contents-mounted="true">
-              <ion-datetime
-                  id="datetime"
-                  presentation="date"
-                  value="2023-11-02"
-                  :format-options="formatOptions"
-              ></ion-datetime>
-            </ion-modal>
+        <form @submit.prevent="submitForm">
+          <!-- Datum -->
+          <div class="timeSelection">
+            <div>
+              <p class="label">Start Datum</p>
+              <ion-datetime-button datetime="startDate"></ion-datetime-button>
+              <ion-modal keep-contents-mounted="true">
+                <ion-datetime
+                    id="startDate"
+                    presentation="date"
+                    v-model="form.startDate"
+                    :format-options="formatOptions"
+                    :disabled="true"
+                />
+              </ion-modal>
+            </div>
+            <div>
+              <p class="label">End Datum</p>
+              <ion-datetime-button datetime="endDate"></ion-datetime-button>
+              <ion-modal keep-contents-mounted="true">
+                <ion-datetime
+                    id="endDate"
+                    presentation="date"
+                    v-model="form.endDate"
+                    :format-options="formatOptions"
+                    :min="minEndDate"
+                />
+              </ion-modal>
+            </div>
           </div>
-          <div>
-            <p class="label">End Datum</p>
-            <ion-datetime-button datetime="datetime"></ion-datetime-button>
-            <ion-modal :keep-contents-mounted="true">
-              <ion-datetime
-                  id="datetime"
-                  presentation="date"
-                  value="2023-11-02"
-                  :format-options="formatOptions"
-              ></ion-datetime>
-            </ion-modal>
+
+          <!-- User Select -->
+          <select v-model="form.userId" required :disabled="id !== 0">
+            <option disabled value="">Benutzer auswählen</option>
+            <option v-for="student in students" :key="student.id" :value="student.id">
+              {{ student.userFullName }}
+            </option>
+          </select>
+
+        <!-- Bestätigen -->
+          <div style="display:flex">
+            <ion-button style="width:100%" expand="block" type="submit">{{ id == 0 ? 'Erstellen' : 'Ändern' }}</ion-button>
+            <ion-button v-if="id !== 0" color="danger" @click="confirmDelete(id)">
+              <ion-icon :icon="deleteIcon" />
+            </ion-button>
           </div>
-        </div>
-
-
-
-
-
-      <!-- Trefferliste -->
-        <div class="results">
-          <!--<p>{{searchQuery}} : {{users?.value?.length ?? 0}} Treffer</p>-->
-
-          <ion-list class="customer-list">
-            <ion-card
-                v-for="user in users"
-                :key="user.id"
-                class="customer-card"
-                button
-                @click="selectUser()">
-
-
-
-              <div class="card-body">
-
-                <div class="text">
-                  <div class="userId">{{ user.id }}</div>
-                  <p class="userFullName">{{ user.userFullName }}</p>
-                </div>
-              </div>
-
-            </ion-card>
-          </ion-list>
-        </div>
-      <!-- Bestätigen -->
-      <ion-button expand="block" @click="confirmBooking">Bestätigen</ion-button>
+        </form>
       </div>
     </ion-content>
-
   </ion-page>
 </template>
 
@@ -109,13 +76,13 @@ import {useUserStore} from '@/stores/userStore';
 import {useBookingStore} from '@/stores/bookingStore';
 import {useNavigation} from "@/services/navigationService";
 import ImageCoverComponent from "@/components/ImageCoverComponent.vue";
-import defaultCover from "../../assets/default_book_cover.jpg";
 import {Book} from "@/models/book";
 import {User} from "@/models/user";
-import {searchCircleOutline} from "ionicons/icons";
-import {IonIcon} from "@ionic/vue";
-import { IonDatetime, IonDatetimeButton, IonModal } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import {IonButton, IonDatetime, IonDatetimeButton, IonIcon, IonModal} from '@ionic/vue';
+import router from "@/router";
+import {Booking} from "@/models/booking";
+import {trash} from "ionicons/icons";
+const deleteIcon = trash
 const { getIdFromUrl } = useNavigation();
 
 const bookStore = useBookStore();
@@ -123,48 +90,78 @@ const userStore = useUserStore();
 const bookingStore = useBookingStore();
 
 const bookId = getIdFromUrl("bookId");
+let id: number = 0;
+let minEndDate: string = '';
 
+const booking = ref<Booking>()
 const book = ref<Book>()
-const users = ref<User[]>();
-const searchQuery = ref('');
-const startDate = ref('');
-const endDate = ref('');
-const selectedUser = ref(null);
+const students = ref<User[]>();
+
+function getISODateNDaysFromToday(n: number): string {
+  const date = new Date();
+  date.setDate(date.getDate() + n);
+  return date.toISOString();
+}
+
+function formatDateOnly(dateString: string): string {
+  return new Date(dateString).toISOString().split('T')[0];
+}
+
+const form = ref<Partial<Booking>>({
+  startDate: getISODateNDaysFromToday(0),
+  endDate: getISODateNDaysFromToday(14),
+  userId: null,
+  bookId: bookId,
+});
 
 onMounted(async () => {
   try {
     if(bookId) {
-      book.value = await bookStore.fetchDetails(bookId)
+      book.value = await bookStore.fetchDetails(bookId);
+      if(book.value.bookingId){
+        id = book.value.bookingId;
+        booking.value = await bookingStore.fetchEditDetails(id)
+        if(booking.value){
+          form.value = booking.value;
+        }
+      }
     }
   } catch (err) {
     console.error('Fehler beim Laden der Buch-Details:', err)
   }
   try{
-    users.value = await userStore.getUsers();
+    students.value = await userStore.getStudents();
   }
   catch (err){
     console.error('Fehler beim Laden der Users:', err)
   }
+  minEndDate = id === 0 ? getISODateNDaysFromToday(0) : booking.value?.startDate ?? '';
 });
 
-const searchUsers = async () => {
-  users.value = await userService.searchUsers(searchQuery.value);
-};
+async function submitForm() {
+  const newBooking: Pick<Booking, any> = {
+    startDate: formatDateOnly(form.value.startDate ?? ''),
+    endDate: formatDateOnly(form.value.endDate ?? ''),
+    userId: form.value.userId,
+    bookId: bookId,
+  }
+  if (id == 0) {
+    await bookingStore.createBooking(newBooking);
+    router.push(`/book/${bookId}`);
+  } else {
+    const response = await bookingStore.updateBooking(id, newBooking);
+    if (response) {
+      router.push(`/book/${bookId}`);
+    }
+  }
+}
 
-const selectUser = (user) => {
-  selectedUser.value = user;
-};
-
-const confirmBooking = async () => {
-  if (!selectedUser.value || !startDate.value || !endDate.value) return;
-  await bookingStore.createBooking({
-    bookId,
-    userId: selectedUser.value.id,
-    startDate: startDate.value,
-    endDate: endDate.value
-  });
-  router.push('/books'); // zurück zur Übersicht
-};
+async function confirmDelete(id: number) {
+  if (confirm('Buchung wirklich löschen?')) {
+    await bookingStore.deleteBooking(id)
+    router.push(`/book/${bookId}`)
+  }
+}
 
 const formatOptions = {
   date: {
@@ -206,27 +203,6 @@ const formatOptions = {
   font-size: 1.5rem;
 }
 
-.searchButton{
-  color :black;
-}
-
-.searchbar{
-  border: black solid 1px;
-  border-radius: 10px;
-  height: 10px;
-  padding: 0px;
-}
-
-
-
-.search-section {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 12px;
-  flex-wrap: nowrap;
-}
-
 .timeSelection{
   justify-content: left;
   display: flex;
@@ -243,86 +219,4 @@ const formatOptions = {
   font-weight: bold;
 }
 
-.search-icon {
-  font-size: 1.8rem;
-  margin-right: 0px;
-  color: #666;
-  width: 35px;
-}
-
-.search-input {
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  color: #444;
-  width: 90%;
-}
-
-
-.icon-only {
-  font-size: 4rem;
-
-  color: black;
-}
-
-.search-input-wrapper {
-  display: flex;
-  align-items: center;
-  border: 2px solid black;
-  border-radius: 30px;
-  padding: 1px 5px;
-  flex-grow: 1;
-  min-width: 0; /* verhindert Überbreite */
-  background-color: transparent;
-}
-
-.search-button {
-  flex-shrink: 0;
-  width: 35px;
-  height: 35px;
-  margin-left: 0px;
-  margin-right: 0px;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.filter-button {
-  flex-shrink: 0;
-  white-space: nowrap;
-  background-color: white;
-  border: 2px solid black;
-  border-radius: 12px;
-  padding: 4px 12px;
-  font-size: 1rem;
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
-}
-
-.card-body {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  background-color: #fef1bc;
-}
-
-.customer-card {
-  position: relative;
-  background-color: #fef1bc;
-  border: 1px solid rgba(0,0,0,0.2);
-  border-radius: 8px;
-  padding: 16px;
-  padding-top: 32px;
-  margin: 12px 0;
-}
-
-.results{
-  border-radius: 15px;
-  height: 400px;
-  overflow-y: scroll;
-}
-
-.customer-list{
-  background-color: transparent;
-}
 </style>
