@@ -235,7 +235,7 @@ paths:
             type: integer
             format: int64
       responses:
-        '201':
+        '200':
           description: Editable fields
           content:
             application/json:
@@ -390,6 +390,9 @@ components:
           type: integer
         available:
           type: boolean
+        bookingId:
+          type: integer
+          format: int64
 
     BookEdit:
       type: object
@@ -457,8 +460,9 @@ components:
     BookingEditResponse:
       type: object
       properties:
-        userFullName:
-          type: string
+        user_id:
+          type: integer
+          format: int64
         startDate:
           type: string
           format: date
