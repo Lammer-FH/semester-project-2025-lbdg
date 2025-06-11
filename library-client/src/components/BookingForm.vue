@@ -93,8 +93,8 @@ const bookId = getIdFromUrl("bookId");
 let id: number = 0;
 let minEndDate: string = '';
 
-const booking = ref<Booking>()
-const book = ref<Book>()
+const booking = ref<Booking| null>()
+const book = ref<Book| null>()
 const students = ref<User[]>();
 
 function getISODateNDaysFromToday(n: number): string {
@@ -118,7 +118,7 @@ onMounted(async () => {
   try {
     if(bookId) {
       book.value = await bookStore.fetchDetails(bookId);
-      if(book.value.bookingId){
+      if(book.value && book.value.bookingId){
         id = book.value.bookingId;
         booking.value = await bookingStore.fetchEditDetails(id)
         if(booking.value){

@@ -11,7 +11,7 @@ export const useBookingStore = defineStore('booking', {
         /**
          * Load booking details for viewing
          */
-        async fetchDetails(id: number): Promise<Booking> {
+        async fetchDetails(id: number): Promise<Booking | null> {
             const booking = await bookingService.getBookingDetails(id)
             this.current = booking
             return booking
@@ -20,7 +20,7 @@ export const useBookingStore = defineStore('booking', {
         /**
          * Load booking data for editing
          */
-        async fetchEditDetails(id: number): Promise<Booking> {
+        async fetchEditDetails(id: number): Promise<Booking | null> {
             const booking = await bookingService.getBookingEditDetails(id)
             this.editDetails = booking
             return booking
