@@ -16,7 +16,6 @@ import java.util.UUID;
 
 @Configuration
 public class DBPopulator {
-
     @Autowired
     private BookRepository bookRepository;
     @Autowired

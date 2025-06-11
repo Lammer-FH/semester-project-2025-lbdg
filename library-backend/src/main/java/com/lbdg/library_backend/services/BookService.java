@@ -110,42 +110,4 @@ public class BookService {
 
         return Optional.of(BookMapper.toBookEditResponseDTO(bookEntity.get()));
     }
-
-
-    // TODO löschen
-    /* public void createBook(BookRequestDTO book){
-        return null;
-        bookEntity = BookEntity.builder()
-                .author(book.getAuthor())
-                .title(book.getTitle())
-                .isbn(book.getIsbn())
-                .image(book.getImageUrl() != null ? book.getImageUrl().getBytes() : null)
-                .publisher(book.getPublisher())
-                .shortDescription(book.getShortDescription())
-                .publishedYear(book.getPublishedYear())
-                .libraryId(book.getLibraryId())
-                .build();
-
-        bookRepository.save(bookEntity);
-    }
-
-    public Optional<List<BookResponseDTO>> getBooks(){
-        List<BookResponseDTO> books = new ArrayList<>();
-        List <BookEntity> bookEntities = bookRepository.findAll();
-        bookEntities.forEach(bookEntity -> {
-            books.add(BookResponseDTO.builder()
-                    .libraryId(bookEntity.getLibraryId())
-                    .author(bookEntity.getAuthor())
-                    .title(bookEntity.getTitle())
-                    .isbn(bookEntity.getIsbn())
-                    .imageUrl(null)
-                    .publisher(bookEntity.getPublisher())
-                    .shortDescription(bookEntity.getShortDescription())
-                    .publishedYear(bookEntity.getPublishedYear())
-                    .build());
-        });
-
-        return Optional.of(books);
-
-    }*/
 }

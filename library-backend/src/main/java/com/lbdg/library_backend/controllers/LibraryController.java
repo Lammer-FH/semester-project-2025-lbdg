@@ -1,6 +1,5 @@
 package com.lbdg.library_backend.controllers;
 
-import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookListResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.LibraryResponseDTO;
 import com.lbdg.library_backend.services.LibraryService;
@@ -13,7 +12,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/libraries")
 public class LibraryController {
-
     @Autowired
     private LibraryService libraryService;
 

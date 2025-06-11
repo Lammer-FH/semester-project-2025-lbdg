@@ -1,6 +1,5 @@
 package com.lbdg.library_backend.repositories;
 
-import com.lbdg.library_backend.entities.BookEntity;
 import com.lbdg.library_backend.entities.RatingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

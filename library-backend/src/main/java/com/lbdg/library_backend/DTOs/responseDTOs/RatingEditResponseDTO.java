@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import java.time.LocalDate;
-
 @Builder
 @Jacksonized
 @Value

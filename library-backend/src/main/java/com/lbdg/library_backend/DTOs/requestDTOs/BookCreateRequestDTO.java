@@ -25,5 +25,4 @@ public class BookCreateRequestDTO {
     private String shortDescription;
     @JsonProperty("publishedYear")
     private Integer publishedYear;
-
 }

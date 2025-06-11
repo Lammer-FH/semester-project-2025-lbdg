@@ -17,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -90,7 +88,4 @@ public class BookingService {
         bookingRepository.save(bookingEntity);
         return bookingEntity.getId();
     }
-
-
-
 }
