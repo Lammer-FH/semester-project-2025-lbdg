@@ -16,6 +16,16 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
+      <div class="book-create-button">
+        <ion-button
+            color="success"
+            size="small"
+            v-if="selectedLibrary != null && userStore.role == 'LIBRARIAN'"
+            button
+            @click="navigateTo({ name:'BookForm', params:{ libraryId: selectedLibrary } })">
+          <ion-icon :icon="addIcon" class="add-button-icon"></ion-icon>
+        </ion-button>
+      </div>
       <div v-if="books.length" class="cards-container">
         <ion-list class="book-list">
           <ion-card
@@ -28,15 +38,12 @@
             <div class="isbn">ISBN {{ book.isbn }}</div>
 
             <div class="card-body">
-              <img :src="defaultCover"
-                   alt="Cover"
-                   class="book-image" />
+              <ImageCoverComponent :bookImage="book.image"/>
               <div class="text">
                 <p class="author">{{ book.author ? book.author : 'Platzhalter Author' }}</p>
                 <h3 class="title">{{ book.title }}</h3>
               </div>
             </div>
-
             <div class="status">
         <span class="status-text">
           {{ book.available ? 'ausleihbar' : 'ausgeborgt' }}
@@ -59,35 +66,38 @@ import {
   IonSelectOption,
   IonLabel,
   IonItem,
-  IonSelect
+  IonSelect,
+  IonIcon
 } from "@ionic/vue";
-import defaultCover from '../../assets/default_book_cover.jpg'
+import {
+  add
+} from 'ionicons/icons'
 import {onMounted, ref} from "vue";
 import {Library} from "@/models/library";
-import {libraryService} from "@/services/librariesService";
+import {useLibraryStore} from "@/stores/libraryStore";
 import {Book} from "@/models/book";
 import {useNavigation} from "@/services/navigationService";
+import {useUserStore} from "@/stores/userStore";
+import ImageCoverComponent from "@/components/ImageCoverComponent.vue";
 const { navigateTo } = useNavigation()
 const { setIdToUrl } = useNavigation()
 const { getIdFromUrl } = useNavigation()
 const libraries = ref<Library[]>([])
 const books = ref<Book[]>([])
 const selectedLibrary = ref<number | null>(null)
+const addIcon = add
+const userStore = useUserStore()
+const libraryStore = useLibraryStore()
 
 onMounted(async () => {
-  try {
-    libraries.value = await libraryService.getLibraries();
-    const libraryId = getIdFromUrl("libraryId");
-    console.log("id", libraryId)
-    if (libraryId) {
-      const match = libraries.value.find(lib => lib.id === libraryId)
-      if (match) {
-        selectedLibrary.value = match.id
-        loadBooksForLibrary(libraryId)
-      }
+  libraries.value = await libraryStore.fetchAll();
+  const libraryId = getIdFromUrl("libraryId");
+  if (libraryId && libraries.value) {
+    const match = libraries.value.find(lib => lib.id === libraryId)
+    if (match) {
+      selectedLibrary.value = match.id
+      loadBooksForLibrary(libraryId)
     }
-  } catch (err) {
-    console.error('Fehler beim Laden der Bibliotheken:', err)
   }
 })
 
@@ -100,11 +110,7 @@ function onLibraryChange(event: CustomEvent) {
 }
 
 async function loadBooksForLibrary(libraryId: number) {
-  try {
-    books.value = await libraryService.getBooksOfLibrary(libraryId)
-  } catch (err) {
-    console.error('Fehler beim Laden der Bücher:', err)
-  }
+  books.value = await libraryStore.fetchBooks(libraryId)
 }
 
 </script>
@@ -112,11 +118,6 @@ async function loadBooksForLibrary(libraryId: number) {
 <style scoped>
   .home-page{
     margin-top: 70px;
-  }
-
-  .book-image {
-    width: 100%;
-    border-radius: 8px;
   }
 
   .book-card {
@@ -141,12 +142,6 @@ async function loadBooksForLibrary(libraryId: number) {
     display: flex;
     gap: 12px;
     align-items: center;
-  }
-
-  .book-image {
-    width: 60px;
-    border-radius: 4px;
-    object-fit: cover;
   }
 
   .text {
@@ -199,7 +194,11 @@ async function loadBooksForLibrary(libraryId: number) {
     background: #ffffff;
     padding: 16px;
     border-radius: 8px;
-    margin: 16px auto;
+    margin: 10px auto;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .book-create-button{
+    margin-top: 5px;
   }
 </style>

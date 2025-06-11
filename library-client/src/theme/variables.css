@@ -6,3 +6,9 @@ ion-content {
     --background: #f4c291;
     --ion-text-color: black;
 }
+
+.add-button-icon {
+    color: white;
+    font-size: 24px;
+    width: 24px;
+}

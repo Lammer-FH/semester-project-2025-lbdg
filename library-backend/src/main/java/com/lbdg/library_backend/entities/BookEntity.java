@@ -1,16 +1,18 @@
 package com.lbdg.library_backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Table(name = "books")
 public class BookEntity {
     @Id
@@ -32,7 +34,7 @@ public class BookEntity {
     private String isbn;
 
     @Lob
-    @Column(name = "image")
+    @Column(name = "image", columnDefinition = "LONGBLOB")
     private byte[] image;
 
     @Column(name = "publisher", nullable = false)
@@ -43,4 +45,12 @@ public class BookEntity {
 
     @Column(name = "published_year")
     private Integer publishedYear;
+
+    @OneToMany(mappedBy = "bookEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    private List<RatingEntity> ratings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "bookEntity", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    private List<BookingEntity> bookings = new ArrayList<>();
 }

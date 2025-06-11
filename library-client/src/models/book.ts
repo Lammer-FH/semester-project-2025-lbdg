@@ -8,5 +8,6 @@ export interface Book {
     publisher: string
     shortDescription: string
     publishedYear: number
-    available: boolean;
+    available: boolean
+    bookingId: number
 }

@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia'
+import {User} from "@/models/user";
+import {userService} from "@/services/userService";
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -16,6 +18,12 @@ export const useUserStore = defineStore('user', {
             this.id = null
             this.name = null
             this.role = null
+        },
+        async getUsers(): Promise<User[]> {
+            return await userService.getUsers();
+        },
+        async getStudents(): Promise<User[]> {
+            return await userService.getStudents();
         }
     },
 })
