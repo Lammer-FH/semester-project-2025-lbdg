@@ -8,14 +8,6 @@ export const useBookingStore = defineStore('booking', {
         editDetails: null as Booking | null,
     }),
     actions: {
-        /**
-         * Load booking details for viewing
-         */
-        async fetchDetails(id: number): Promise<Booking | null> {
-            const booking = await bookingService.getBookingDetails(id)
-            this.current = booking
-            return booking
-        },
 
         /**
          * Load booking data for editing

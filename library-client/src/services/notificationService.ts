@@ -1,7 +1,6 @@
 import { toastController } from '@ionic/vue';
 import { closeOutline } from 'ionicons/icons';
 
-
 export async function notify(
     message: string,
     type: 'success' | 'danger' | 'warning' | 'primary' = 'primary'

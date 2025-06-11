@@ -28,9 +28,6 @@ import { createPinia } from 'pinia'
  * https://ionicframework.com/docs/theming/dark-mode
  */
 
-/* @import '@ionic/vue/css/palettes/dark.always.css'; */
-/* @import '@ionic/vue/css/palettes/dark.class.css'; */
-
 /* Theme variables */
 import './theme/variables.css';
 
