@@ -38,7 +38,11 @@
           -->
           <tr>
             <td></td>
-            <td><button type="submit" class="submit-button">{{ id == null ? 'Erstellen' : 'Ändern' }}</button></td>
+            <td>
+              <ion-buttons slot="start">
+                <ion-back-button default-href="defaultHref" />
+                <button type="submit" class="submit-button">{{ id == null ? 'Erstellen' : 'Ändern' }}</button>
+              </ion-buttons></td>
           </tr>
         </table>
       </form>
@@ -51,7 +55,7 @@ import {
   IonContent,
   IonPage,
   IonLabel,
-  IonItem,
+  IonItem, IonButtons, IonBackButton,
 } from "@ionic/vue";
 import {onMounted, ref} from "vue";
 import {Book} from "@/models/book";
@@ -64,6 +68,8 @@ const bookStore = useBookStore()
 const book = ref<Book>()
 const id = getIdFromUrl("id");
 const libraryId = getIdFromUrl("libraryId");
+
+const defaultHref = id == null ? "libaries/" + libraryId + "/books" : "/books/" + id
 
 const form = ref<Partial<Book>>({
   libraryId: libraryId,
