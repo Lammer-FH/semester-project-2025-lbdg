@@ -68,7 +68,6 @@ import {
 import {
   add
 } from 'ionicons/icons'
-import defaultCover from '../../assets/default_book_cover.jpg'
 import {onMounted, ref} from "vue";
 import {Library} from "@/models/library";
 import {useLibraryStore} from "@/stores/libraryStore";

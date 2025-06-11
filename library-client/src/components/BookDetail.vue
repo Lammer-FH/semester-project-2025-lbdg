@@ -223,7 +223,6 @@ import { useBookStore } from '@/stores/bookStore'
 import { useRatingStore } from '@/stores/ratingStore'
 import type { Rating } from '@/models/rating'
 import type { Book } from '@/models/book'
-import defaultCover from '../../assets/default_book_cover.jpg'
 import { useNavigation } from '@/services/navigationService'
 import router from '@/router'
 import { useUserStore } from '@/stores/userStore'
@@ -377,13 +376,6 @@ async function confirmDelete(bookId: number, libraryId: number) {
   gap: 16px;
   align-items: center;
   margin-bottom: 16px;
-}
-
-.book-image {
-  width: 100px;
-  height: auto;
-  border-radius: 4px;
-  object-fit: cover;
 }
 
 .heading {
