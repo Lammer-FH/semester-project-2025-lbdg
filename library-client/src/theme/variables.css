@@ -6,7 +6,3 @@ ion-content {
     --background: #f4c291;
     --ion-text-color: black;
 }
-
-.custom-toast {
-    opacity: 0.6;
-}
