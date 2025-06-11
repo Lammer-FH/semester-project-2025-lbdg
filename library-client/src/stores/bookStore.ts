@@ -13,7 +13,7 @@ export const useBookStore = defineStore('book', {
         /**
          * Load book details for viewing
          */
-        async fetchDetails(id: number): Promise<Book> {
+        async fetchDetails(id: number): Promise<Book | null> {
             const book = await bookService.getBookDetails(id)
             this.current = book
             return book
@@ -22,7 +22,7 @@ export const useBookStore = defineStore('book', {
         /**
          * Load book data for editing
          */
-        async fetchEditDetails(id: number): Promise<Book> {
+        async fetchEditDetails(id: number): Promise<Book | null> {
             const book = await bookService.getBookEditDetails(id)
             this.editDetails = book
             return book
