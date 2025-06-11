@@ -3,7 +3,10 @@ package com.lbdg.library_backend.controllers;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookListResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.LibraryResponseDTO;
 import com.lbdg.library_backend.services.LibraryService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,14 +19,20 @@ public class LibraryController {
     private LibraryService libraryService;
 
     @GetMapping
-    public List<LibraryResponseDTO> getLibraries()
+    public ResponseEntity<List<LibraryResponseDTO>> getLibraries()
     {
-        return libraryService.getLibraries();
+        List<LibraryResponseDTO> libraryResponseDTOList = libraryService.getLibraries();
+        return ResponseEntity.status(200).body(libraryResponseDTOList);
     }
 
     @GetMapping("/{id}/books")
-    public List<BookListResponseDTO> getBooksOfLibrary(@PathVariable Long id)
+    public ResponseEntity<List<BookListResponseDTO>> getBooksOfLibrary(@PathVariable Long id)
     {
-        return libraryService.getBooksOfLibrary(id);
+        try {
+            List<BookListResponseDTO> bookListResponseDTOList = libraryService.getBooksOfLibrary(id);
+            return ResponseEntity.status(200).body(bookListResponseDTOList);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

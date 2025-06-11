@@ -6,7 +6,9 @@ import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookEditResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingResponseDTO;
 import com.lbdg.library_backend.services.BookService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,42 +24,66 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<BookDetailsResponseDTO> getBookDetails(@PathVariable Long id)
     {
-        BookDetailsResponseDTO bookDetailsResponseDTO = bookService.getBookDetails(id);
-        return ResponseEntity.status(200).body(bookDetailsResponseDTO);
+        try {
+            BookDetailsResponseDTO bookDetailsResponseDTO = bookService.getBookDetails(id);
+            return ResponseEntity.status(200).body(bookDetailsResponseDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{id}/edit")
     public ResponseEntity<BookEditResponseDTO> getEditableBookDetails(@PathVariable Long id)
     {
-        return bookService.getEditableBookDetails(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        try {
+            BookEditResponseDTO bookEditResponseDTO = bookService.getEditableBookDetails(id);
+            return ResponseEntity.status(200).body(bookEditResponseDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/{id}/ratings")
-    public List<RatingResponseDTO> getRatingsOfBook(@PathVariable Long id)
+    public ResponseEntity<List<RatingResponseDTO>> getRatingsOfBook(@PathVariable Long id)
     {
-        return bookService.getRatingsOfBook(id);
+        try {
+            List<RatingResponseDTO> ratingResponseDTOList = bookService.getRatingsOfBook(id);
+            return ResponseEntity.status(200).body(ratingResponseDTOList);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping()
     public ResponseEntity<Long> createBook (@RequestBody BookCreateRequestDTO bookCreateRequestDTO)
     {
-        Long bookId = bookService.createBook(bookCreateRequestDTO);
-        return ResponseEntity.status(201).body(bookId);
+        try {
+            Long bookId = bookService.createBook(bookCreateRequestDTO);
+            return ResponseEntity.status(201).body(bookId);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> editBook (@PathVariable Long id, @RequestBody BookEditRequestDTO bookEditRequestDTO)
     {
-        bookService.editBook(id, bookEditRequestDTO);
-        return ResponseEntity.status(200).build();
+        try {
+            bookService.editBook(id, bookEditRequestDTO);
+            return ResponseEntity.status(200).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBook (@PathVariable Long id)
     {
-        bookService.deleteBook(id);
-        return ResponseEntity.status(200).build();
+        try {
+            bookService.deleteBook(id);
+            return ResponseEntity.status(200).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
