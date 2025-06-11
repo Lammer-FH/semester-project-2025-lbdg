@@ -11,7 +11,7 @@
       <div class="detail-card">
         <h1 class="header">Buch ausleihen</h1>
         <div class="top">
-          <ImageCoverComponent/>
+          <ImageCoverComponent :bookImage="book?.image"/>
           <div class="heading">
             <h2 class="title">{{book?.title }}</h2>
             <p class="isbn">{{ book?.isbn}}</p>
@@ -217,6 +217,13 @@ const formatOptions = {
   margin-top: 2px;
   font-size: 1.1rem;
   font-weight: bold;
+}
+
+.book-image {
+  width: 100px;
+  height: auto;
+  border-radius: 4px;
+  object-fit: cover;
 }
 
 </style>
