@@ -161,7 +161,7 @@ async function submitForm() {
 }
 
 .submit-button {
-  width: 100px;
+  width: 130px;
   height: 40px;
   background-color: #0046cc;
   color: white;
