@@ -13,11 +13,7 @@
       <div v-if="book" class="detail-container">
         <div class="detail-card">
           <div class="top">
-            <img
-                :src="defaultCover"
-                alt="Cover"
-                class="detail-image"
-            />
+            <ImageCoverComponent :bookImage="book.image"/>
             <div class="heading">
               <p class="author">{{ book.author ?? 'Platzhalter Author' }}</p>
               <h2 class="title">{{ book.title }}</h2>
@@ -235,6 +231,7 @@ import {
   star, starHalf, starOutline,
   personCircleOutline, pencil, trash
 } from 'ionicons/icons'
+import ImageCoverComponent from "@/components/ImageCoverComponent.vue";
 
 const { navigateTo, getIdFromUrl } = useNavigation()
 const userStore = useUserStore()
@@ -380,7 +377,7 @@ async function confirmDelete(bookId: number, libraryId: number) {
   margin-bottom: 16px;
 }
 
-.detail-image {
+.book-image {
   width: 100px;
   height: auto;
   border-radius: 4px;

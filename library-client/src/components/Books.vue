@@ -34,9 +34,7 @@
             <div class="isbn">ISBN {{ book.isbn }}</div>
 
             <div class="card-body">
-              <img :src="defaultCover"
-                   alt="Cover"
-                   class="book-image" />
+              <ImageCoverComponent :bookImage="book.image"/>
               <div class="text">
                 <p class="author">{{ book.author ? book.author : 'Platzhalter Author' }}</p>
                 <h3 class="title">{{ book.title }}</h3>
@@ -77,6 +75,7 @@ import {useLibraryStore} from "@/stores/libraryStore";
 import {Book} from "@/models/book";
 import {useNavigation} from "@/services/navigationService";
 import {useUserStore} from "@/stores/userStore";
+import ImageCoverComponent from "@/components/ImageCoverComponent.vue";
 const { navigateTo } = useNavigation()
 const { setIdToUrl } = useNavigation()
 const { getIdFromUrl } = useNavigation()
