@@ -39,25 +39,22 @@ public class BookService {
     @Autowired
     private final LibraryRepository libraryRepository;
 
-    // TODO Exception werfen Buch not found
-    public Optional<BookDetailsResponseDTO> getBookDetails(Long bookId)
+    public BookDetailsResponseDTO getBookDetails(Long bookId)
     {
-        Optional<BookEntity> bookEntity = bookRepository.findById(bookId);
-
-        if(bookEntity.isEmpty()){
+        BookEntity bookEntity = bookRepository.findById(bookId).orElseThrow(() -> {
             log.error("Book not found with id {}", bookId);
-            return Optional.empty();
-        }
+            return new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
+        });
 
         LocalDate currentDate = LocalDate.now();
-        Optional<Long> activeBookingId =  bookingRepository.findActiveBookingId(currentDate, bookEntity.get().getId());
+        Optional<Long> activeBookingId =  bookingRepository.findActiveBookingId(currentDate, bookEntity.getId());
         Boolean isAvailable = true;
         Long bookingId = null;
         if (activeBookingId.isPresent()) {
             isAvailable = false;
             bookingId = activeBookingId.get();
         }
-        return Optional.of(BookMapper.toBookDetailsResponseDTO(bookEntity.get(), isAvailable, bookingId));
+        return BookMapper.toBookDetailsResponseDTO(bookEntity, isAvailable, bookingId);
     }
 
     public List<RatingResponseDTO> getRatingsOfBook(Long bookId)
@@ -72,10 +69,12 @@ public class BookService {
         return ratings;
     }
 
-    // TODO Exception werfen
     public Long createBook(BookCreateRequestDTO bookCreateRequestDTO) {
         LibraryEntity libraryEntity = libraryRepository.findById(bookCreateRequestDTO.getLibraryId())
-                .orElseThrow(() -> new RuntimeException("Library not found"));
+                .orElseThrow(() -> {
+                    log.error("Library not found with id {}", bookCreateRequestDTO.getLibraryId());
+                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Library not found");
+                });
 
         BookEntity bookEntity = BookMapper.toBookEntity(bookCreateRequestDTO, libraryEntity);
         bookEntity = bookRepository.save(bookEntity);

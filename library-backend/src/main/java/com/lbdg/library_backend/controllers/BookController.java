@@ -4,6 +4,7 @@ import com.lbdg.library_backend.DTOs.requestDTOs.BookCreateRequestDTO;
 import com.lbdg.library_backend.DTOs.requestDTOs.BookEditRequestDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookEditResponseDTO;
+import com.lbdg.library_backend.DTOs.responseDTOs.BookingEditResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingResponseDTO;
 import com.lbdg.library_backend.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,8 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<BookDetailsResponseDTO> getBookDetails(@PathVariable Long id)
     {
-        return bookService.getBookDetails(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        BookDetailsResponseDTO bookDetailsResponseDTO = bookService.getBookDetails(id);
+        return ResponseEntity.status(200).body(bookDetailsResponseDTO);
     }
 
     @GetMapping("/{id}/edit")
