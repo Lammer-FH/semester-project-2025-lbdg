@@ -17,14 +17,6 @@ ___
 * Spring Boot Backend
 * Ionic Vue.js Frontend
 ---
-marp: true
-author: Team LBDG
-version: 1.0.0
-theme: a4-document
-paginate: true
-header: ' '
-footer: 'Advanced Web Frameworks 2025'
----
 
 # Project Specification – Template
 
