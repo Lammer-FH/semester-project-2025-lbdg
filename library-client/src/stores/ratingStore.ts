@@ -20,7 +20,7 @@ export const useRatingStore = defineStore('rating', {
         /**
          * Fetch one rating
          */
-        async fetchOne(id: number): Promise<Rating> {
+        async fetchOne(id: number): Promise<Rating | null> {
             const rating = await ratingService.getRating(id)
             this.current = rating
             return rating
@@ -29,14 +29,14 @@ export const useRatingStore = defineStore('rating', {
         /**
          * Create a new rating
          */
-        async createRating(payload: Omit<Rating, 'id'|'userFullName'>): Promise<Rating> {
+        async createRating(payload: Omit<Rating, 'id'|'userFullName'>): Promise<Rating | null> {
             return await ratingService.createRating(payload)
         },
 
         /**
          * Update an existing rating
          */
-        async updateRating(id: number, payload: Partial<Omit<Rating, 'id'|'userId'|'userFullName'>>): Promise<Rating> {
+        async updateRating(id: number, payload: Partial<Omit<Rating, 'id'|'userId'|'userFullName'>>): Promise<Rating | null> {
             return await ratingService.updateRating(id, payload)
         },
 
