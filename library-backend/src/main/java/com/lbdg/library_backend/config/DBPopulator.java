@@ -7,6 +7,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -29,6 +32,7 @@ public class DBPopulator {
             if (libraryRepository.count() > 0 || bookRepository.count() > 0 || ratingRepository.count() > 0 || userRepository.count() > 0 || bookingRepository.count() > 0) {
                 return;
             }
+
             // Create users
             UserEntity user1 = userRepository.save(new UserEntity(null, "Franz", "Bauer", "franz.bauer@mail.com", Role.LIBRARIAN, UUID.randomUUID().toString().substring(0,8)));
             UserEntity user2 = userRepository.save(new UserEntity(null, "Anna", "Müller", "anna.mueller@mail.com", Role.LIBRARIAN, UUID.randomUUID().toString().substring(0,8)));
@@ -38,8 +42,13 @@ public class DBPopulator {
             LibraryEntity library1 = libraryRepository.save(new LibraryEntity(null, "Technikum Wien", "Höchstädtplatz 6, 1200 Wien"));
             LibraryEntity library2 = libraryRepository.save(new LibraryEntity(null, "Universität Wien", "Universitätsring 1, 1010 Wien"));
 
-            BookEntity book1 = bookRepository.save(new BookEntity(null, library1, "Ulrich Breymann", "C++ programmieren", "918-3-16-148410-0", null, "Carl Hansen", "Ein praxisnahes Lehrbuch, das C++-Grundlagen und fortgeschrittene Themen verständlich vermittelt.", 2023, new ArrayList<>(), new ArrayList<>()));
-            BookEntity book2 = bookRepository.save(new BookEntity(null, library2, "Ulrich Breymann", "C++ programmieren", "918-3-16-148410-0", null, "Carl Hansen", "Ein praxisnahes Lehrbuch, das C++-Grundlagen und fortgeschrittene Themen verständlich vermittelt.", 2023, new ArrayList<>(), new ArrayList<>()));
+            Path bookImagePath1 = Paths.get("assets/book1.jpg");
+            byte[] bookImage1 = Files.readAllBytes(bookImagePath1);
+            Path bookImagePath2 = Paths.get("assets/book2.jpg");
+            byte[] bookImage2 = Files.readAllBytes(bookImagePath2);
+
+            BookEntity book1 = bookRepository.save(new BookEntity(null, library1, "Ulrich Breymann", "C++ programmieren", "918-3-16-148410-0", bookImage1, "Carl Hansen", "Ein praxisnahes Lehrbuch, das C++-Grundlagen und fortgeschrittene Themen verständlich vermittelt.", 2023, new ArrayList<>(), new ArrayList<>()));
+            BookEntity book2 = bookRepository.save(new BookEntity(null, library2, "Ulrich Breymann", "C++ programmieren", "918-3-16-148410-0", bookImage2, "Carl Hansen", "Ein praxisnahes Lehrbuch, das C++-Grundlagen und fortgeschrittene Themen verständlich vermittelt.", 2023, new ArrayList<>(), new ArrayList<>()));
 
             BookEntity book3 = bookRepository.save(new BookEntity(null, library1, "Daniel Basler", "Neuronale Netze mit C# programmieren", "978-3-55-54435-4", null, "Carl Hansen", "Mit praktischen Beispielen für Machine Learning im Unternehmenseinsatz", 2021, new ArrayList<>(), new ArrayList<>()));
 
