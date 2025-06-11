@@ -64,9 +64,9 @@ public class DBPopulator {
 
             LocalDate currentDate = LocalDate.now();
 
-            BookingEntity booking1 = bookingRepository.save(new BookingEntity(null, book1, user1, currentDate, currentDate.plusDays(14)));
+            BookingEntity booking1 = bookingRepository.save(new BookingEntity(null, book1, user3, currentDate, currentDate.plusDays(14)));
 
-            BookingEntity booking2 = bookingRepository.save(new BookingEntity(null, book2, user2, currentDate.minusDays(15), currentDate.minusDays(1)));
+            BookingEntity booking2 = bookingRepository.save(new BookingEntity(null, book2, user4, currentDate.minusDays(15), currentDate.minusDays(1)));
 
             book1.getBookings().add(booking1);
             book2.getBookings().add(booking2);
