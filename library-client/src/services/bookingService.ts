@@ -7,26 +7,6 @@ const API_URL = 'http://localhost:8080/library-system/v1/bookings';
 
 export const bookingService = {
 
-    // TODO Deprecated
-    async getBookingDetails(id: number): Promise<Booking | null> {
-        try{
-            const response = await axios.get<Booking>(`${API_URL}/${id}`);
-            return response.data;
-        } catch (error: any) {
-            const status = error.response?.status;
-
-            switch (status) {
-                case 404: // HttpStatus.NOT_FOUND
-                    await notify(`${error.status}: Es konnte keine Buchung mit der ID ${id} gefunden werden!`, 'danger');
-                    break;
-                default:
-                    await notify(`${status ?? 'unbekannt'}: Ein unerwarteter Fehler ist aufgetreten.`, 'danger');
-            }
-
-            return null;
-        }
-    },
-
     async getBookingEditDetails(id: number): Promise<Booking | null> {
         try{
             const response = await axios.get<Booking>(`${API_URL}/${id}/edit`);
