@@ -9,6 +9,7 @@ import com.lbdg.library_backend.mappers.LibraryMapper;
 import com.lbdg.library_backend.repositories.BookRepository;
 import com.lbdg.library_backend.repositories.BookingRepository;
 import com.lbdg.library_backend.repositories.LibraryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class LibraryService {
 
     public List<BookListResponseDTO> getBooksOfLibrary(Long libraryId) {
         List<BookListResponseDTO> books = new ArrayList<>();
+        if (!libraryRepository.existsById(libraryId)) {
+            throw new EntityNotFoundException("Library with ID " + libraryId + " not found");
+        }
         List<BookEntity> bookEntities = bookRepository.findByLibraryEntityId(libraryId);
         LocalDate currentDate = LocalDate.now();
 

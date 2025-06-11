@@ -6,6 +6,7 @@ import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookEditResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingResponseDTO;
 import com.lbdg.library_backend.entities.BookEntity;
+import com.lbdg.library_backend.entities.BookingEntity;
 import com.lbdg.library_backend.entities.LibraryEntity;
 import com.lbdg.library_backend.entities.RatingEntity;
 import com.lbdg.library_backend.mappers.BookMapper;
@@ -14,6 +15,7 @@ import com.lbdg.library_backend.repositories.BookRepository;
 import com.lbdg.library_backend.repositories.BookingRepository;
 import com.lbdg.library_backend.repositories.LibraryRepository;
 import com.lbdg.library_backend.repositories.RatingRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +43,8 @@ public class BookService {
 
     public BookDetailsResponseDTO getBookDetails(Long bookId)
     {
-        BookEntity bookEntity = bookRepository.findById(bookId).orElseThrow(() -> {
-            log.error("Book not found with id {}", bookId);
-            return new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
-        });
+        BookEntity bookEntity = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found"));
 
         LocalDate currentDate = LocalDate.now();
         Optional<Long> activeBookingId =  bookingRepository.findActiveBookingId(currentDate, bookEntity.getId());
@@ -57,8 +57,11 @@ public class BookService {
         return BookMapper.toBookDetailsResponseDTO(bookEntity, isAvailable, bookingId);
     }
 
-    public List<RatingResponseDTO> getRatingsOfBook(Long bookId)
-    {
+    public List<RatingResponseDTO> getRatingsOfBook(Long bookId) {
+        if (!bookRepository.existsById(bookId)) {
+            throw new EntityNotFoundException("Book with ID " + bookId + " not found");
+        }
+
         List<RatingResponseDTO> ratings = new ArrayList<>();
         List<RatingEntity> ratingEntities = ratingRepository.findByBookEntityId(bookId);
 
@@ -71,10 +74,7 @@ public class BookService {
 
     public Long createBook(BookCreateRequestDTO bookCreateRequestDTO) {
         LibraryEntity libraryEntity = libraryRepository.findById(bookCreateRequestDTO.getLibraryId())
-                .orElseThrow(() -> {
-                    log.error("Library not found with id {}", bookCreateRequestDTO.getLibraryId());
-                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Library not found");
-                });
+                .orElseThrow(() -> new EntityNotFoundException("Library not found"));
 
         BookEntity bookEntity = BookMapper.toBookEntity(bookCreateRequestDTO, libraryEntity);
         bookEntity = bookRepository.save(bookEntity);
@@ -83,10 +83,7 @@ public class BookService {
 
     public void editBook(Long bookId, BookEditRequestDTO bookEditRequestDTO) {
         BookEntity bookEntity = bookRepository.findById(bookId)
-                .orElseThrow(() -> {
-                    log.error("Book not found with id {}", bookId);
-                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
-                });
+                .orElseThrow(() -> new EntityNotFoundException("Book not found"));
 
         BookMapper.updateBookEntityFromBookEditRequestDTO(bookEntity, bookEditRequestDTO);
         bookRepository.save(bookEntity);
@@ -94,20 +91,15 @@ public class BookService {
 
     public void deleteBook(Long bookId) {
         if (!bookRepository.existsById(bookId)) {
-            log.error("Book not found with id {}", bookId);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Book with ID " + bookId + " not found");
+            throw new EntityNotFoundException("Book with ID " + bookId + " not found");
         }
         bookRepository.deleteById(bookId);
     }
 
-    public Optional<BookEditResponseDTO> getEditableBookDetails(Long bookId) {
-        Optional<BookEntity> bookEntity = bookRepository.findById(bookId);
+    public BookEditResponseDTO getEditableBookDetails(Long bookId) {
+        BookEntity bookEntity = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Booking with ID " + bookId + " not found"));
 
-        if(bookEntity.isEmpty()){
-            log.error("Book not found with id {}", bookId);
-            return Optional.empty();
-        }
-
-        return Optional.of(BookMapper.toBookEditResponseDTO(bookEntity.get()));
+        return BookMapper.toBookEditResponseDTO(bookEntity);
     }
 }
