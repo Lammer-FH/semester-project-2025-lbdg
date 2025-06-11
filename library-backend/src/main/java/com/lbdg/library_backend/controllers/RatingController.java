@@ -4,6 +4,7 @@ import com.lbdg.library_backend.DTOs.requestDTOs.RatingCreateRequestDTO;
 import com.lbdg.library_backend.DTOs.requestDTOs.RatingEditRequestDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingEditResponseDTO;
 import com.lbdg.library_backend.services.RatingService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,28 +21,44 @@ public class RatingController {
     @GetMapping("/{id}/edit")
     public ResponseEntity<RatingEditResponseDTO> getEditableRatingDetails(@PathVariable Long id)
     {
-        RatingEditResponseDTO ratingEditResponseDTO = ratingService.getEditableRatingDetails(id);
-        return ResponseEntity.status(200).body(ratingEditResponseDTO);
+        try {
+            RatingEditResponseDTO ratingEditResponseDTO = ratingService.getEditableRatingDetails(id);
+            return ResponseEntity.status(200).body(ratingEditResponseDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> editRating(@PathVariable Long id, @Valid @RequestBody RatingEditRequestDTO ratingEditRequestDTO)
     {
-        ratingService.editRating(id, ratingEditRequestDTO);
-        return ResponseEntity.status(200).build();
+        try {
+            ratingService.editRating(id, ratingEditRequestDTO);
+            return ResponseEntity.status(200).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRating (@PathVariable Long id)
     {
-        ratingService.deleteRating(id);
-        return ResponseEntity.status(200).build();
+        try {
+            ratingService.deleteRating(id);
+            return ResponseEntity.status(200).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping()
     public ResponseEntity<Long> createRating (@Valid @RequestBody RatingCreateRequestDTO ratingCreateRequestDTO)
     {
-        Long ratingId = ratingService.createRating(ratingCreateRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ratingId);
+        try {
+            Long ratingId = ratingService.createRating(ratingCreateRequestDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(ratingId);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

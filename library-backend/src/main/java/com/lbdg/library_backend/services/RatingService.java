@@ -10,6 +10,7 @@ import com.lbdg.library_backend.mappers.RatingMapper;
 import com.lbdg.library_backend.repositories.BookRepository;
 import com.lbdg.library_backend.repositories.RatingRepository;
 import com.lbdg.library_backend.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +31,14 @@ public class RatingService {
 
     public RatingEditResponseDTO getEditableRatingDetails(Long ratingId) {
         RatingEntity ratingEntity = ratingRepository.findById(ratingId)
-                .orElseThrow(() -> {
-                    log.error("Rating not found with id {}", ratingId);
-                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Rating with ID " + ratingId + " not found");
-                });
+                .orElseThrow(() -> new EntityNotFoundException("Rating with ID " + ratingId + " not found"));
 
         return RatingMapper.toRatingEditResponseDTO(ratingEntity);
     }
 
     public void editRating(Long ratingId, RatingEditRequestDTO ratingEditRequestDTO) {
         RatingEntity ratingEntity = ratingRepository.findById(ratingId)
-                .orElseThrow(() -> {
-                    log.error("Rating not found with id {}", ratingId);
-                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Rating with ID " + ratingId + " not found");
-                });
+                .orElseThrow(() -> new EntityNotFoundException("Rating with ID " + ratingId + " not found"));
 
         RatingMapper.updateRatingEntityFromRatingEditRequestDTO(ratingEntity, ratingEditRequestDTO);
         ratingRepository.save(ratingEntity);
@@ -51,8 +46,7 @@ public class RatingService {
 
     public void deleteRating(Long ratingId) {
         if (!ratingRepository.existsById(ratingId)) {
-            log.error("Rating not found with id {}", ratingId);
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Rating with ID " + ratingId + " not found");
+            throw new EntityNotFoundException("Rating with ID " + ratingId + " not found");
         }
         ratingRepository.deleteById(ratingId);
     }
@@ -62,15 +56,11 @@ public class RatingService {
         Long userId = ratingCreateRequestDTO.getUserId();
 
         BookEntity bookEntity = bookRepository.findById(bookId)
-                .orElseThrow(() -> {
-                    log.error("Book not found with id {}", bookId);
-                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "Book not found");
-                });
+                .orElseThrow(() -> new EntityNotFoundException("Book with ID " + bookId + " not found"));
+
         UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("User not found with id {}", userId);
-                    return new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-                });
+                .orElseThrow(() -> new EntityNotFoundException("User with ID " + userId + " not found"));
+
         RatingEntity ratingEntity = RatingMapper.toRatingEntity(ratingCreateRequestDTO, bookEntity, userEntity);
 
         ratingRepository.save(ratingEntity);

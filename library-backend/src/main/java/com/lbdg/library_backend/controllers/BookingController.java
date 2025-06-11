@@ -4,6 +4,7 @@ import com.lbdg.library_backend.DTOs.requestDTOs.BookingCreateRequestDTO;
 import com.lbdg.library_backend.DTOs.requestDTOs.BookingEditRequestDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookingEditResponseDTO;
 import com.lbdg.library_backend.services.BookingService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,28 +21,48 @@ public class BookingController {
     @GetMapping("/{id}/edit")
     public ResponseEntity<BookingEditResponseDTO> getEditableBookingDetails(@PathVariable Long id)
     {
-        BookingEditResponseDTO bookingEditResponseDTO = bookingService.getEditableBookingDetails(id);
-        return ResponseEntity.status(200).body(bookingEditResponseDTO);
+        try {
+            BookingEditResponseDTO bookingEditResponseDTO = bookingService.getEditableBookingDetails(id);
+            return ResponseEntity.status(200).body(bookingEditResponseDTO);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> editBooking(@PathVariable Long id, @RequestBody BookingEditRequestDTO bookingEditRequestDTO)
     {
-        bookingService.editBooking(id, bookingEditRequestDTO);
-        return ResponseEntity.status(200).build();
+        try {
+            bookingService.editBooking(id, bookingEditRequestDTO);
+            return ResponseEntity.status(200).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBooking (@PathVariable Long id)
     {
-        bookingService.deleteBooking(id);
-        return ResponseEntity.status(200).build();
+        try {
+            bookingService.deleteBooking(id);
+            return ResponseEntity.status(200).build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping()
     public ResponseEntity<Long> createBooking (@RequestBody BookingCreateRequestDTO bookingCreateRequestDTO)
     {
-        Long bookingId = bookingService.createBooking(bookingCreateRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookingId);
+        try {
+            Long bookingId = bookingService.createBooking(bookingCreateRequestDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(bookingId);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }
