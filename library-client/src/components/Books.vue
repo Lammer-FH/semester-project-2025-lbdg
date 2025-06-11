@@ -16,12 +16,16 @@
           </ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-button
-          v-if="selectedLibrary != null && userStore.role == 'LIBRARIAN'"
-          button
-          @click="navigateTo({ name:'BookForm', params:{ libraryId: selectedLibrary } })">
-        <ion-icon :icon="addIcon"></ion-icon>
-      </ion-button>
+      <div class="book-create-button">
+        <ion-button
+            color="success"
+            size="small"
+            v-if="selectedLibrary != null && userStore.role == 'LIBRARIAN'"
+            button
+            @click="navigateTo({ name:'BookForm', params:{ libraryId: selectedLibrary } })">
+          <ion-icon :icon="addIcon" class="add-button-icon"></ion-icon>
+        </ion-button>
+      </div>
       <div v-if="books.length" class="cards-container">
         <ion-list class="book-list">
           <ion-card
@@ -116,11 +120,6 @@ async function loadBooksForLibrary(libraryId: number) {
     margin-top: 70px;
   }
 
-  .book-image {
-    width: 100%;
-    border-radius: 8px;
-  }
-
   .book-card {
     position: relative;
     background-color: #fef1bc;
@@ -143,12 +142,6 @@ async function loadBooksForLibrary(libraryId: number) {
     display: flex;
     gap: 12px;
     align-items: center;
-  }
-
-  .book-image {
-    width: 60px;
-    border-radius: 4px;
-    object-fit: cover;
   }
 
   .text {
@@ -201,7 +194,11 @@ async function loadBooksForLibrary(libraryId: number) {
     background: #ffffff;
     padding: 16px;
     border-radius: 8px;
-    margin: 16px auto;
+    margin: 10px auto;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .book-create-button{
+    margin-top: 5px;
   }
 </style>
