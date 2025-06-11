@@ -198,7 +198,6 @@ const formatOptions = {
 .header{
   text-align: left;
   width: 100%;
-  margin-top: 0px;
   margin-bottom: 5px;
   font-size: 1.5rem;
 }
