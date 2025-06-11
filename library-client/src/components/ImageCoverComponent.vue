@@ -1,21 +1,27 @@
 <template>
   <img
-      :src="defaultCover"
+      :src="imageSrc"
       alt="Cover"
-      class="detail-image"
+      class="book-image"
   />
 </template>
 
 <script setup lang='ts'>
-//TODO: add bookCover as Input, use default cover as fallback.
-  import defaultCover from '../../assets/default_book_cover.jpg'
-</script>
 
-<style>
-  .detail-image {
-    width: 100px;
-    height: auto;
-    border-radius: 4px;
-    object-fit: cover;
+import {computed} from "vue";
+
+interface Props {
+  bookImage?: string // Base64 string
+}
+
+const props = defineProps<Props>()
+
+
+const defaultCover = '../../assets/default_book_cover.jpg'
+const imageSrc = computed(() => {
+  if (props.bookImage) {
+    return `data:image/jpeg;base64,${props.bookImage}`
   }
-</style>
+  return defaultCover
+})
+</script>
