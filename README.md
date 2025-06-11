@@ -33,6 +33,30 @@ footer: 'Advanced Web Frameworks 2025'
 * start backend: run LibraryBackendApplication
 * start frontend- "ionic serve"
 
+## ▶️ start docker
+
+start docker desktop
+
+
+**on root:**
+```bash
+cd .\library-backend
+docker compose up -d
+```
+## ▶️ start backend
+```bash
+
+mvn clean install spring-boot:run
+```
+
+## ▶️ start frontend
+In another terminal:
+```bash
+cd ./library-client
+npm install
+npm run dev
+```
+
 ## Resource Description
 
 
