@@ -596,4 +596,9 @@ async function confirmDelete(bookId: number, libraryId: number) {
   max-width: 600px;
   margin: 0 auto;
 }
+
+.comment-textarea{
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
 </style>
