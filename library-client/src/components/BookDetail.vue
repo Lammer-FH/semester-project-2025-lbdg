@@ -148,6 +148,7 @@
                 ></span>
               </div>
               <ion-button
+                  v-if="userStore.role === 'LIBRARIAN'"
                   size="small"
                   @click="navigateTo({ name: 'BookingForm', params: { bookId: book.id } })"
               >
