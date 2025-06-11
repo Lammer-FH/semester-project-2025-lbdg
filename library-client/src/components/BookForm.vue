@@ -30,15 +30,17 @@
             <td><label for="isbn">ISBN:</label></td>
             <td><input id="isbn" type="text" v-model="form.isbn" required/></td>
           </tr>
-          <!--
           <tr>
             <td><label for="image">Bild:</label></td>
-            <td><input id="image" type="text" v-model="form.image" /></td>
+            <td><input type="file" accept="image/*" @change="handleImageUpload" /></td>
           </tr>
-          -->
           <tr>
             <td></td>
-            <td><button type="submit" class="submit-button">{{ id == null ? 'Erstellen' : 'Ändern' }}</button></td>
+            <td>
+              <ion-buttons slot="start">
+                <ion-back-button default-href="defaultHref" />
+                <button type="submit" class="submit-button">{{ id == null ? 'Erstellen' : 'Ändern' }}</button>
+              </ion-buttons></td>
           </tr>
         </table>
       </form>
@@ -51,7 +53,7 @@ import {
   IonContent,
   IonPage,
   IonLabel,
-  IonItem,
+  IonItem, IonButtons, IonBackButton,
 } from "@ionic/vue";
 import {onMounted, ref} from "vue";
 import {Book} from "@/models/book";
@@ -64,6 +66,8 @@ const bookStore = useBookStore()
 const book = ref<Book| null>()
 const id = getIdFromUrl("id");
 const libraryId = getIdFromUrl("libraryId");
+
+const defaultHref = id == null ? "libaries/" + libraryId + "/books" : "/books/" + id
 
 const form = ref<Partial<Book>>({
   libraryId: libraryId,
@@ -85,11 +89,27 @@ onMounted(async () => {
   }
 })
 
+const handleImageUpload = (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    const result = reader.result;
+    if (typeof result === 'string') {
+      form.value.image = result.split(',')[1]; // remove "data:image/...;base64,"
+    } else {
+      console.warn('FileReader result was not a string:', result);
+    }
+  };
+  reader.readAsDataURL(file);
+};
+
 async function submitForm() {
   const newBook: Pick<Book, any> = {
     libraryId: 1,
     author: form.value.author ?? '',
-    image: null,
+    image: form.value.image,
     isbn: form.value.isbn ?? '',
     publishedYear: form.value.publishedYear ?? 2025,
     publisher: form.value.publisher ?? '',
