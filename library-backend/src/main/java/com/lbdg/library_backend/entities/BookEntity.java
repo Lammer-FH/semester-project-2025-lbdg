@@ -34,7 +34,7 @@ public class BookEntity {
     private String isbn;
 
     @Lob
-    @Column(name = "image")
+    @Column(name = "image", columnDefinition = "LONGBLOB")
     private byte[] image;
 
     @Column(name = "publisher", nullable = false)
