@@ -2,16 +2,11 @@ package com.lbdg.library_backend.mappers;
 
 import com.lbdg.library_backend.DTOs.requestDTOs.RatingCreateRequestDTO;
 import com.lbdg.library_backend.DTOs.requestDTOs.RatingEditRequestDTO;
-import com.lbdg.library_backend.DTOs.responseDTOs.BookEditResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingEditResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingResponseDTO;
 import com.lbdg.library_backend.entities.BookEntity;
-import com.lbdg.library_backend.entities.BookingEntity;
 import com.lbdg.library_backend.entities.RatingEntity;
 import com.lbdg.library_backend.entities.UserEntity;
-
-import java.util.Base64;
-import java.util.Optional;
 
 
 public class RatingMapper {

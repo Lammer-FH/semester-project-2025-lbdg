@@ -1,7 +1,6 @@
 package com.lbdg.library_backend.repositories;
 
 import com.lbdg.library_backend.entities.BookingEntity;
-import com.lbdg.library_backend.entities.RatingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

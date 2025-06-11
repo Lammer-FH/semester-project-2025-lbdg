@@ -4,10 +4,8 @@ import com.lbdg.library_backend.DTOs.requestDTOs.RatingCreateRequestDTO;
 import com.lbdg.library_backend.DTOs.requestDTOs.RatingEditRequestDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingEditResponseDTO;
 import com.lbdg.library_backend.entities.BookEntity;
-import com.lbdg.library_backend.entities.BookingEntity;
 import com.lbdg.library_backend.entities.RatingEntity;
 import com.lbdg.library_backend.entities.UserEntity;
-import com.lbdg.library_backend.mappers.BookingMapper;
 import com.lbdg.library_backend.mappers.RatingMapper;
 import com.lbdg.library_backend.repositories.BookRepository;
 import com.lbdg.library_backend.repositories.RatingRepository;
@@ -18,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -80,6 +76,4 @@ public class RatingService {
         ratingRepository.save(ratingEntity);
         return ratingEntity.getId();
     }
-    
-        
 }

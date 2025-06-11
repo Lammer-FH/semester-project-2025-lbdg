@@ -1,15 +1,9 @@
 package com.lbdg.library_backend.services;
 
-import com.lbdg.library_backend.DTOs.responseDTOs.BookListResponseDTO;
-import com.lbdg.library_backend.DTOs.responseDTOs.LibraryResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.UserResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.UserStudentResponseDTO;
 import com.lbdg.library_backend.config.Role;
-import com.lbdg.library_backend.entities.BookEntity;
-import com.lbdg.library_backend.entities.LibraryEntity;
 import com.lbdg.library_backend.entities.UserEntity;
-import com.lbdg.library_backend.mappers.BookMapper;
-import com.lbdg.library_backend.mappers.LibraryMapper;
 import com.lbdg.library_backend.mappers.UserMapper;
 import com.lbdg.library_backend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,5 +43,4 @@ public class UserService {
 
         return students;
     }
-
 }

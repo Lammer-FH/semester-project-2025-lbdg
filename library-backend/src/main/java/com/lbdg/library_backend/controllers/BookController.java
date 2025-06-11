@@ -4,7 +4,6 @@ import com.lbdg.library_backend.DTOs.requestDTOs.BookCreateRequestDTO;
 import com.lbdg.library_backend.DTOs.requestDTOs.BookEditRequestDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookDetailsResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.BookEditResponseDTO;
-import com.lbdg.library_backend.DTOs.responseDTOs.BookingEditResponseDTO;
 import com.lbdg.library_backend.DTOs.responseDTOs.RatingResponseDTO;
 import com.lbdg.library_backend.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/books")
 public class BookController {
-
     @Autowired
     private BookService bookService;
 
@@ -35,8 +33,6 @@ public class BookController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-
 
     @GetMapping("/{id}/ratings")
     public List<RatingResponseDTO> getRatingsOfBook(@PathVariable Long id)
@@ -64,16 +60,4 @@ public class BookController {
         bookService.deleteBook(id);
         return ResponseEntity.status(200).build();
     }
-
-    /*@PostMapping
-    public void createBook(@RequestBody BookResponseDTO book)
-    {
-          bookService.createBook(book);
-    }
-
-    @GetMapping
-    public List<BookResponseDTO> getBooks()
-    {
-        return bookService.getBooks().orElse(null);
-    }*/
 }
