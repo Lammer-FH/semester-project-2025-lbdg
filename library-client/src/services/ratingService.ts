@@ -5,23 +5,6 @@ import {notify} from "@/services/notificationService";
 const API_URL = 'http://localhost:8080/library-system/v1/ratings'
 
 export const ratingService = {
-    // TODO deprecated
-    // Fetch all ratings (optionally filter by bookId)
-    async getRatings(bookId?: number): Promise<Rating[]> {
-
-        const url = bookId != null
-            ? `${API_URL}?bookId=${bookId}`
-            : API_URL
-        const response = await axios.get<Rating[]>(url)
-        return response.data
-    },
-
-    // TODO deprecated
-    // Fetch one rating (for edit form)
-    async getRating(id: number): Promise<Rating | null> {
-        const response = await axios.get<Rating>(`${API_URL}/${id}`)
-        return response.data
-    },
 
     // Create a new rating
     async createRating(r: Omit<Rating, 'id'|'userFullName'>): Promise<Rating | null> {

@@ -8,23 +8,6 @@ export const useRatingStore = defineStore('rating', {
         current: null as Rating | null,
     }),
     actions: {
-        /**
-         * Fetch all ratings, optionally for a specific book
-         */
-        async fetchAll(bookId?: number): Promise<Rating[]> {
-            const ratings = await ratingService.getRatings(bookId)
-            this.list = ratings
-            return ratings
-        },
-
-        /**
-         * Fetch one rating
-         */
-        async fetchOne(id: number): Promise<Rating | null> {
-            const rating = await ratingService.getRating(id)
-            this.current = rating
-            return rating
-        },
 
         /**
          * Create a new rating
