@@ -1,48 +1,67 @@
 <template>
-  <ion-page class="home-page">
+  <ion-page class="edit-page">
     <ion-content class="ion-padding">
-      <ion-item>
+      <ion-item class="header">
         <ion-label>Buch {{ id == null ? 'erstellen' : 'bearbeiten' }}</ion-label>
       </ion-item>
       <form @submit.prevent="submitForm">
-        <table>
-          <tr>
-            <td><label for="author">Autor:</label></td>
-            <td><input id="author" type="text" v-model="form.author" required/></td>
-          </tr>
-          <tr>
-            <td><label for="title">Titel:</label></td>
-            <td><input id="title" type="text" v-model="form.title" required/></td>
-          </tr>
-          <tr>
-            <td><label for="publishedYear">Erscheinungsjahr:</label></td>
-            <td><input id="publishedYear" type="number" v-model="form.publishedYear" /></td>
-          </tr>
-          <tr>
-            <td><label for="publisher">Verlag:</label></td>
-            <td><input id="publisher" type="text" v-model="form.publisher" required/></td>
-          </tr>
-          <tr>
-            <td><label for="shortDescription">Kurzbeschreibung:</label></td>
-            <td><input id="shortDescription" type="text" v-model="form.shortDescription" /></td>
-          </tr>
-          <tr>
-            <td><label for="isbn">ISBN:</label></td>
-            <td><input id="isbn" type="text" v-model="form.isbn" required/></td>
-          </tr>
-          <tr>
-            <td><label for="image">Bild:</label></td>
-            <td><input type="file" accept="image/*" @change="handleImageUpload" /></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>
-              <ion-buttons slot="start">
-                <ion-back-button default-href="defaultHref" />
-                <button type="submit" class="submit-button">{{ id == null ? 'Erstellen' : 'Ändern' }}</button>
-              </ion-buttons></td>
-          </tr>
-        </table>
+        <div class="form-group">
+          <label for="author">Autor*:</label>
+          <input id="author" type="text" autocomplete="off" v-model="form.author" required />
+        </div>
+
+        <div class="form-group">
+          <label for="title">Titel*:</label>
+          <input id="title" type="text" autocomplete="off" v-model="form.title" required />
+        </div>
+
+        <div class="form-group">
+          <label for="publishedYear">Erscheinungsjahr:</label>
+          <ion-datetime-button class="datetime-button" datetime="publishedYear"></ion-datetime-button>
+          <ion-modal keep-contents-mounted="true">
+            <ion-datetime
+                id="publishedYear"
+                presentation="year"
+                v-model="form.publishedYear"
+                :prefer-wheel="false"
+                :show-default-buttons="true"
+                :highlighted-dates="[]"
+            />
+          </ion-modal>
+        </div>
+
+        <div class="form-group">
+          <label for="publisher">Verlag*:</label>
+          <input id="publisher" type="text" autocomplete="off" v-model="form.publisher" required />
+        </div>
+
+        <div class="form-group">
+          <label for="shortDescription">Kurzbeschreibung:</label>
+          <textarea
+              id="shortDescription"
+              v-model="form.shortDescription"
+              rows="4"
+              autocomplete="off"
+              class="short-description-textarea"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="isbn">ISBN*:</label>
+          <input id="isbn" type="text" autocomplete="off" v-model="form.isbn" required />
+        </div>
+
+        <div class="form-group">
+          <label for="image">Bild:</label>
+          <input type="file" accept="image/*" @change="handleImageUpload" />
+        </div>
+
+        <div class="form-actions">
+          <ion-buttons slot="start">
+            <ion-back-button default-href="defaultHref" />
+            <button type="submit" class="submit-button">{{ id == null ? 'Erstellen' : 'Ändern' }}</button>
+          </ion-buttons>
+        </div>
       </form>
     </ion-content>
   </ion-page>
@@ -53,7 +72,10 @@ import {
   IonContent,
   IonPage,
   IonLabel,
-  IonItem, IonButtons, IonBackButton,
+  IonItem,
+  IonButtons,
+  IonBackButton,
+  IonDatetime, IonModal, IonDatetimeButton
 } from "@ionic/vue";
 import {onMounted, ref} from "vue";
 import {Book} from "@/models/book";
@@ -134,12 +156,46 @@ async function submitForm() {
 </script>
 
 <style scoped>
-.home-page{
+.edit-page{
   margin-top: 70px;
 }
 
 .submit-button {
   width: 100px;
   height: 40px;
+  background-color: #0046cc;
+  color: white;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;            /* Innenabstand */
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.header{
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.form-actions {
+  margin-top: 1.5rem;
+}
+
+.datetime-button{
+  display: flex;
+  justify-content: flex-start;
 }
 </style>
