@@ -178,6 +178,7 @@
               </ion-title>
             </ion-toolbar>
           </ion-header>
+          <!-- TODO abstand beim Bearbeitungs modal schöner machen-->
           <ion-content class="ion-padding">
             <div class="form-wrapper">
               <form @submit.prevent="saveRating">
@@ -242,7 +243,7 @@ const userStore = useUserStore()
 // State
 const bookStore = useBookStore()
 const ratingStore = useRatingStore()
-const book = ref<Book>()
+const book = ref<Book| null>()
 const ratings = ref<Rating[]>([])
 const expanded = ref(false)
 

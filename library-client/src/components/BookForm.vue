@@ -61,7 +61,7 @@ import router from "@/router";
 const { getIdFromUrl } = useNavigation()
 
 const bookStore = useBookStore()
-const book = ref<Book>()
+const book = ref<Book| null>()
 const id = getIdFromUrl("id");
 const libraryId = getIdFromUrl("libraryId");
 

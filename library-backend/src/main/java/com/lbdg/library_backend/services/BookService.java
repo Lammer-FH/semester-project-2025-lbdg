@@ -39,6 +39,7 @@ public class BookService {
     @Autowired
     private final LibraryRepository libraryRepository;
 
+    // TODO Exception werfen Buch not found
     public Optional<BookDetailsResponseDTO> getBookDetails(Long bookId)
     {
         Optional<BookEntity> bookEntity = bookRepository.findById(bookId);
@@ -71,6 +72,7 @@ public class BookService {
         return ratings;
     }
 
+    // TODO Exception werfen
     public Long createBook(BookCreateRequestDTO bookCreateRequestDTO) {
         LibraryEntity libraryEntity = libraryRepository.findById(bookCreateRequestDTO.getLibraryId())
                 .orElseThrow(() -> new RuntimeException("Library not found"));
@@ -110,6 +112,8 @@ public class BookService {
         return Optional.of(BookMapper.toBookEditResponseDTO(bookEntity.get()));
     }
 
+
+    // TODO löschen
     /* public void createBook(BookRequestDTO book){
         return null;
         bookEntity = BookEntity.builder()
