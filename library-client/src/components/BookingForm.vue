@@ -58,7 +58,7 @@
 
         <!-- Bestätigen -->
           <div style="display:flex">
-            <ion-button style="width:100%" expand="block" type="submit">{{ id == 0 ? 'Erstellen' : 'Ändern' }}</ion-button>
+            <ion-button style="width:100%" expand="block" type="submit">{{ id == null ? 'Erstellen' : 'Ändern' }}</ion-button>
             <ion-button v-if="id !== 0" color="danger" @click="confirmDelete(id)">
               <ion-icon :icon="deleteIcon" />
             </ion-button>
@@ -198,7 +198,6 @@ const formatOptions = {
 .header{
   text-align: left;
   width: 100%;
-  margin-top: 0px;
   margin-bottom: 5px;
   font-size: 1.5rem;
 }

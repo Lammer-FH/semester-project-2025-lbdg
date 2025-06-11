@@ -42,7 +42,7 @@
             <h3>{{ book.shortDescription }}</h3>
           </section>
 
-          <section class="reviews" v-if="ratings.length">
+          <section class="reviews">
             <h3>Kundenrezensionen</h3>
 
             <div class="stars">
@@ -73,6 +73,7 @@
 
             <div class="toggle-wrapper">
               <ion-button
+                  v-if="ratings.length"
                   fill="clear"
                   class="toggle-btn"
                   @click="expanded = !expanded"
@@ -85,7 +86,7 @@
               </ion-button>
 
               <ion-button
-                  v-if="userStore.role === 'STUDENT'"
+                  v-if="userStore.role === 'STUDENT' && !userHasRating"
                   fill="outline"
                   size="small"
                   class="add-rating-btn"
@@ -243,6 +244,7 @@ const ratingStore = useRatingStore()
 const book = ref<Book| null>()
 const ratings = ref<Rating[]>([])
 const expanded = ref(false)
+const userHasRating = ref(false)
 
 // Modal/form state
 const ratingModalOpen = ref(false)
@@ -263,7 +265,9 @@ const deleteIcon = trash
 const id = getIdFromUrl('id')
 async function refreshRatings() {
   if (!book.value) return
+  userHasRating.value = false;
   ratings.value = await bookStore.fetchRatings(book.value.id)
+  userHasRating.value = ratings.value.some(r => r.userId === userStore.id);
 }
 
 onMounted(async () => {
@@ -445,11 +449,11 @@ async function confirmDelete(bookId: number, libraryId: number) {
 }
 
 .toggle-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: end;
-  gap: 8px;
-  margin: 8px 0 16px;
+  justify-content: center;
+  height: 35px;
 }
 
 .toggle-btn {
@@ -457,8 +461,8 @@ async function confirmDelete(bookId: number, libraryId: number) {
 }
 
 .add-rating-btn {
-  --padding-start: 8px;
-  --padding-end:   8px;
+  position: absolute;
+  right: 0;
 }
 
 .toggle-icon {
@@ -595,5 +599,10 @@ async function confirmDelete(bookId: number, libraryId: number) {
   /* if you want it centered or constrained in width: */
   max-width: 600px;
   margin: 0 auto;
+}
+
+.comment-textarea{
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 </style>
