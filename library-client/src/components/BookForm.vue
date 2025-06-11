@@ -30,12 +30,10 @@
             <td><label for="isbn">ISBN:</label></td>
             <td><input id="isbn" type="text" v-model="form.isbn" required/></td>
           </tr>
-          <!--
           <tr>
             <td><label for="image">Bild:</label></td>
-            <td><input id="image" type="text" v-model="form.image" /></td>
+            <td><input type="file" accept="image/*" @change="handleImageUpload" /></td>
           </tr>
-          -->
           <tr>
             <td></td>
             <td>
@@ -91,11 +89,27 @@ onMounted(async () => {
   }
 })
 
+const handleImageUpload = (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    const result = reader.result;
+    if (typeof result === 'string') {
+      form.value.image = result.split(',')[1]; // remove "data:image/...;base64,"
+    } else {
+      console.warn('FileReader result was not a string:', result);
+    }
+  };
+  reader.readAsDataURL(file);
+};
+
 async function submitForm() {
   const newBook: Pick<Book, any> = {
     libraryId: 1,
     author: form.value.author ?? '',
-    image: null,
+    image: form.value.image,
     isbn: form.value.isbn ?? '',
     publishedYear: form.value.publishedYear ?? 2025,
     publisher: form.value.publisher ?? '',
